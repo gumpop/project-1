@@ -9,6 +9,9 @@ private:
     CellType type;
     int population;
     int pollution;
+    bool update;
+    bool updatePollution;
+
 public:
     int getRow();
     int getColumn();
@@ -18,4 +21,8 @@ public:
     void incrementPopulation();
     int getPollution();
     void setPollution( int x );
+    bool isUpdate();
+    void setUpdate( bool b );
+    bool isUpdatePollution();
+    void setUpdatePollution( bool b );
 };
