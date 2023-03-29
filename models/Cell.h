@@ -13,6 +13,7 @@ private:
     bool updatePollution;
 
 public:
+    Cell( int r, int c, CellType t );
     int getRow();
     int getColumn();
     CellType getType();

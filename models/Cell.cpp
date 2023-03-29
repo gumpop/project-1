@@ -1,5 +1,11 @@
 #include "Cell.h"
 
+Cell::Cell( int r, int c, CellType t ) {
+    row = r;
+    column = c;
+    type = t;
+}
+
 int Cell::getRow() {
     return row;
 }
