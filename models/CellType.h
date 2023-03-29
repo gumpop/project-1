@@ -5,6 +5,7 @@ enum CellType {
     RESIDENTIAL,
     INDUSTRIAL,
     COMMERCIAL,
+    POWERPLANT,
     ROAD,
     POWERLINE,
     ROAD_OVER_POWERLINE,
