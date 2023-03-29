@@ -31,3 +31,19 @@ int Cell::getPollution() {
 void Cell::setPollution( int x ) {
     pollution = x;
 }
+
+bool Cell::isUpdate() {
+    return update;
+}
+
+void Cell::setUpdate( bool b ) {
+    update = b;
+}
+
+bool Cell::isUpdatePollution() {
+    return updatePollution;
+}
+
+void Cell::setUpdatePollution( bool b ) {
+    updatePollution = b;
+}
