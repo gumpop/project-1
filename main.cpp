@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "simulation-loop/SimulationLoop.h"
 using namespace std;
 
 int main() {
@@ -52,4 +53,7 @@ int main() {
 
     REFRESH_RATE = stoi( temp.substr( temp.find( ':' ) + 1, temp.length() ) );
     cout << "Refreshes every " << REFRESH_RATE << " timesteps" << endl;
+
+    // Start the simulation loop
+    SimulationLoop simLoop( REGION_FILE_NAME, TIME_LIMIT, REFRESH_RATE );
 }
