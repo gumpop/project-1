@@ -4,5 +4,6 @@ enum CellType {
     COMMERCIAL,
     ROAD,
     POWERLINE,
-    ROAD_OVER_POWERLINE
+    ROAD_OVER_POWERLINE,
+    EMPTY
 };
