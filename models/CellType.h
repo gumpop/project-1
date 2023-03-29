@@ -3,5 +3,6 @@ enum CellType {
     INDUSTRIAL,
     COMMERCIAL,
     ROAD,
-    POWERLINE
+    POWERLINE,
+    ROAD_OVER_POWERLINE
 };
