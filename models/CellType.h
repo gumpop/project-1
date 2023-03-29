@@ -1,5 +1,7 @@
 enum CellType {
     RESIDENTIAL,
     INDUSTRIAL,
-    COMMERCIAL
+    COMMERCIAL,
+    ROAD,
+    POWERLINE
 };
