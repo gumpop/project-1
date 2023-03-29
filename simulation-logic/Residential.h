@@ -4,13 +4,19 @@
 
 #include <iostream>
 #include <vector>
+#include "Cell.h"
 
 using namespace std;
 
 class Residential{
     public:
-        ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker);
+        void ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker);
+        int getResidentialPopulation();
     private:
         //add private vars and functions
+        void updateCells(vector<vector<Cell*>> map, int &availWorker);
+        void ruleCheck(vector<vector<Cell*>> map, int xCoord, int yCoord);
+        int population = 0;
+
 };
 #endif //PROJECT_1_RESIDENTIAL_H
