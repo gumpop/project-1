@@ -44,11 +44,6 @@ void SimulationLoop::initializeMap() {
         getline( fin, entireLine );
         vector<string> split = StringSplitter::split( entireLine, ',' );
         for ( auto current : split ) {
-            if ( current.length() > 1 ) {
-                cout << "Unexpected error when parsing region file: a cell has too many characters" << endl;
-                exit( 1 );
-            }
-
             char c = current.at( 0 );
             Cell *cell = new Cell( row, column, CellTypeChars::getCellType( c ) );
             newRow.push_back( cell );
