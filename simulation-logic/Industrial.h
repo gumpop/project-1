@@ -16,5 +16,6 @@ class Industrial{
         void DisplayVector(vector<vector<Cell*>> map);
     private:
         //add private vars and functions
+        
 };
 #endif //PROJECT_1_INDUSTRIAL_H

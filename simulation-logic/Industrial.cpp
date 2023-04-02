@@ -26,6 +26,7 @@ Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &a
         }
       cout << endl;
     } 
+   
     
 bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj){
   bool var = false;
