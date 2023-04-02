@@ -40,7 +40,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
   //Checking around the INDUSTRIAL area to see if population is >= to 1 or if there is a powerline adjacent
     //Checking first row
       if(j-1 >= 0){
-        if(map[i][j-1]->getType() == 4){
+        if(map[i][j-1]->getType() == 5){
            powerlinecounter++;
         }
         if(map[i][j-1]->getPopulation() >= 1){
@@ -48,7 +48,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
         }       
       }
       if(j+1 != boundsj){
-        if(map[i][j+1]->getType() == 4){
+        if(map[i][j+1]->getType() == 5){
           powerlinecounter++;
         }
         if(map[i][j+1]->getPopulation() >= 1){
@@ -58,7 +58,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
       
     //Checking row above
       if(i+1 != boundsi && j-1 >= 0){
-        if(map[i+1][j-1]->getType() == 4){
+        if(map[i+1][j-1]->getType() == 5){
           powerlinecounter++;
         }
         if(map[i+1][j-1]->getPopulation() >= 1){
@@ -66,7 +66,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
         }   
       }
       if(i+1 != boundsi){
-        if(map[i+1][j]->getType() == 4){
+        if(map[i+1][j]->getType() == 5){
           powerlinecounter++;
         }
         if(map[i+1][j]->getPopulation() >= 1){
@@ -74,7 +74,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
         }   
       } 
       if(i+1 != boundsi && j+1 != boundsj){
-        if(map[i+1][j+1]->getType() == 4){
+        if(map[i+1][j+1]->getType() == 5){
           powerlinecounter++;
         }
         if(map[i+1][j+1]->getPopulation() >= 1){
@@ -84,7 +84,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
     
     //Checking row below          
       if(i-1 >= 0 && j-1 >= 0){
-        if(map[i-1][j-1]->getType() == 4){
+        if(map[i-1][j-1]->getType() == 5){
           powerlinecounter++;
         }
         if(map[i-1][j-1]->getPopulation() >= 1){
@@ -92,7 +92,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
         }   
       }
       if(i-1 >= 0){
-        if(map[i-1][j]->getType() == 4){
+        if(map[i-1][j]->getType() == 5){
           powerlinecounter++;
         }
         if(map[i-1][j]->getPopulation() >= 1){
@@ -100,7 +100,7 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
         }   
       }
       if(i-1 >= 0 && j+1 != boundsj){
-        if(map[i-1][j+1]->getType() == 4){
+        if(map[i-1][j+1]->getType() == 5){
           powerlinecounter++;
         }
         if(map[i-1][j+1]->getPopulation() >= 1){
