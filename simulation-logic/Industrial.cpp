@@ -14,8 +14,9 @@ Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &a
                 //FOR TESTING ONLY
                 map[i][j]->setPopulation(0);
                 //Checking if the map at that point meets the standards given on project descriptions canvas
-                bool ToFvar = IndustrialCheck(map, i, j, boundsi, boundsj);
-                if(ToFvar == true){
+                IndustrialCheck(map, i, j, boundsi, boundsj);
+
+                if(map[i][j]->isUpdate() == true){
                   //increment population
                   //assign workers to that spot and...
                   //decrement workers
@@ -29,7 +30,6 @@ Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &a
    
     
 bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj){
-  bool var = false;
   int powerlinecounter = 0;
   int adjpopcounter = 0;
   
@@ -110,10 +110,8 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
     //Checking if there are 1 or more cells with a population of >= 1 or if there is powerline >= 1
       cout << "powerline count = " << powerlinecounter << endl; 
       if(powerlinecounter >= 1 || adjpopcounter >= 1){
-        var = true;
+        map[i][j]->setUpdate(true);
       }
-    //returning variable to change population with other function
-      return var;
     
   case 1:
   //Checking around the INDUSTRIAL area to see if population is >= to 1
@@ -166,10 +164,8 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
     //Checking if there are 2 or more cells with population >= 1
       cout << "pop count = " << adjpopcounter << endl;
       if(adjpopcounter >= 2){
-        var = true;
+        map[i][j]->setUpdate(true);
       }
-    //returning variable to change population with other function
-      return var;
     
   case 2:
   //Checking around the INDUSTRIAL area to see if population is >= to 2
@@ -221,13 +217,9 @@ bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
     //Checking if there are 4 or more cells with population >= 2
       cout << "pop count = " << adjpopcounter << endl;
       if(adjpopcounter >= 4){
-        var = true;
+        map[i][j]->setUpdate(true);
       }
-    //returning variable to change population with other function
-      return var;
       break;
-    
-    return var;
   }
 }
 
