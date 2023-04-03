@@ -21,6 +21,7 @@ SimulationLoop::SimulationLoop(string regionFileName, int timeLimit, int refresh
 void SimulationLoop::printMap() {
     cout << endl;
     if ( timestep != 0 ) {
+        cout << "Timestep: " << timestep << endl;
         cout << "Available Workers: " << availableWorkers << endl;
         cout << "Available Goods: " << availableGoods << endl;
     }
@@ -141,10 +142,10 @@ void SimulationLoop::doLoop() {
         timestep++;
         cloneMap();
 
-        residential.ResidentialUpdate( map, &availableWorkers );
-        commercial.CommercialUpdate( map, &availableWorkers, &availableGoods );
-        industrial.IndustrialUpdate( map, &availableWorkers, &availableGoods );
-        pollution.PollutionUpdate( map, &availableWorkers, &availableGoods );
+        residential.ResidentialUpdate( map, availableWorkers );
+        commercial.CommercialUpdate( map, availableWorkers, availableGoods );
+        industrial.IndustrialUpdate( map, availableWorkers, availableGoods );
+        pollution.PollutionUpdate( map, availableWorkers, availableGoods );
 
         if ( timestep % REFRESH_RATE == 0 ) { printMap(); }
         if ( mapSimilarToClone() ) { return; }
