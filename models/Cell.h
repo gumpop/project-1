@@ -1,3 +1,6 @@
+#ifndef CELLTYPE_H
+#define CELLTYPE_H
+
 #include "CellType.h"
 #include <vector>
 
@@ -27,3 +30,5 @@ public:
     bool isUpdatePollution();
     void setUpdatePollution( bool b );
 };
+
+#endif /* CELLTYPE_H */
