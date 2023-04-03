@@ -20,6 +20,7 @@ SimulationLoop::SimulationLoop(string regionFileName, int timeLimit, int refresh
 
 void SimulationLoop::printMap() {
     cout << endl;
+    // If isn't the zeroth timestep, output more statistics
     if ( timestep != 0 ) {
         cout << "Timestep: " << timestep << endl;
         cout << "Available Workers: " << availableWorkers << endl;
@@ -68,9 +69,11 @@ void SimulationLoop::initializeMap() {
         int column = 0;
 
         getline( fin, entireLine );
+        // Splitting each line of the file by commas and storing those elements
         vector<string> split = StringSplitter::split( entireLine, ',' );
         for ( auto current : split ) {
             char c = current.at( 0 );
+            // Creating a new cell based off the given character type
             Cell *cell = new Cell( row, column, CellTypeChars::getCellType( c ) );
             newRow.push_back( cell );
             column++;
@@ -81,6 +84,7 @@ void SimulationLoop::initializeMap() {
     }
 }
 
+// Creating a clone of the map
 void SimulationLoop::cloneMap() {
     mapClone.clear();
 
@@ -99,22 +103,27 @@ void SimulationLoop::cloneMap() {
     }
 }
 
+// Checking if all the elements in the current map
+//      are equivalent to the elements in the clone map
 bool SimulationLoop::mapSimilarToClone() {
+    // If sizes don't match, then they aren't similar
     if ( map.size() != mapClone.size() ) { return false; }
 
     auto mapRowIter = map.begin();
     auto cloneRowIter = mapClone.begin();
     for ( int rowIndex = 0; rowIndex < map.size(); rowIndex++ ) {
-        vector<Cell*> mapRow = *mapRowIter;
-        vector<Cell> cloneRow = *cloneRowIter;
+        vector<Cell*> mapRow = *mapRowIter; // current map row
+        vector<Cell> cloneRow = *cloneRowIter; // cloned map row
+        // If sizes don't match, then they aren't similar
         if ( mapRow.size() != cloneRow.size() ) { return false; }
 
         auto mapColIter = mapRow.begin();
         auto cloneColIter = cloneRow.begin();
         for ( int colIndex = 0; colIndex < mapRow.size(); colIndex++ ) {
-            Cell *mapCell = *mapColIter;
-            Cell cloneCell = *cloneColIter;
+            Cell *mapCell = *mapColIter; // current map cell
+            Cell cloneCell = *cloneColIter; // cloned map cell
 
+            // Checking if the current map cell is similar to the cloned map cell
             if ( mapCell->getRow() != cloneCell.getRow() || mapCell->getColumn() != cloneCell.getColumn()
                     || mapCell->getType() != cloneCell.getType() || mapCell->getPopulation() != cloneCell.getPopulation()
                     || mapCell->getPollution() != cloneCell.getPollution() ) {
@@ -140,14 +149,18 @@ void SimulationLoop::doLoop() {
 
     while ( timestep <= TIME_LIMIT ) {
         timestep++;
+        // Create a clone of the map and store it
         cloneMap();
 
+        // Updating the map through each of the methods
         residential.ResidentialUpdate( map, availableWorkers );
         commercial.CommercialUpdate( map, availableWorkers, availableGoods );
         industrial.IndustrialUpdate( map, availableWorkers, availableGoods );
         pollution.PollutionUpdate( map, availableWorkers, availableGoods );
 
+        // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) { printMap(); }
+        // If map after updates is similar to cloned map before updates, exit
         if ( mapSimilarToClone() ) { return; }
     }
 }
