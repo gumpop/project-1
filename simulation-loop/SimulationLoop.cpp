@@ -11,15 +11,36 @@ SimulationLoop::SimulationLoop(string regionFileName, int timeLimit, int refresh
 
     initializeMap();
     printMap();
+    doLoop();
 }
 
 void SimulationLoop::printMap() {
+    cout << endl;
+    if ( timestep != 0 ) {
+        cout << "Available Workers: " << availableWorkers << endl;
+        cout << "Available Goods: " << availableGoods << endl;
+    }
     cout << endl;
     for ( auto rowIter = map.begin(); rowIter < map.end(); rowIter++ ) {
         vector<Cell*> currentRow = *rowIter;
         for ( auto colIter = currentRow.begin(); colIter < currentRow.end(); colIter++ ) {
             Cell *currentCell = *colIter;
-            cout << CellTypeChars::getChar( currentCell->getType() ) << " ";
+
+            // If timestep is only zero, only print out the character type of the cell
+            if ( timestep == 0 ) {
+                cout << CellTypeChars::getChar(currentCell->getType()) << SPACE;
+            }
+
+            // If current cell is of type residential, commercial, or industrial, and it's population
+            //      is greater than zero, print it's population instead.
+            else if ( ( currentCell->getType() == RESIDENTIAL || currentCell->getType() == COMMERCIAL
+                        || currentCell->getType() == INDUSTRIAL ) && currentCell->getPopulation() != 0 ) {
+                cout << currentCell->getPopulation() << SPACE;
+            }
+
+            else {
+                cout << CellTypeChars::getChar( currentCell->getType() ) << SPACE;
+            }
         }
 
         cout << endl;
