@@ -7,10 +7,10 @@ private:
     int row;
     int column;
     CellType type;
-    int population;
-    int pollution;
-    bool update;
-    bool updatePollution;
+    int population = 0;
+    int pollution = 0;
+    bool update = false;
+    bool updatePollution = false;
 
 public:
     Cell( int r, int c, CellType t );
