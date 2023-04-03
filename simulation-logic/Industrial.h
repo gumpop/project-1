@@ -4,12 +4,13 @@
 
 #include <iostream>
 #include <vector>
+#include "models/Cell.h"
 
 using namespace std;
 
 class Industrial{
     public:
-        IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood);
+        void IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood);
     private:
         //add private vars and functions
 };
