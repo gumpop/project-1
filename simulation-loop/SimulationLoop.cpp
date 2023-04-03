@@ -1,6 +1,10 @@
 #include "SimulationLoop.h"
 #include <fstream>
 #include <iostream>
+#include "simulation-logic/Commercial.h"
+#include "simulation-logic/Industrial.h"
+#include "simulation-logic/Pollution.h"
+#include "simulation-logic/Residential.h"
 #include "utils/StringSplitter.h"
 #include "utils/CellTypeChars.h"
 
@@ -73,5 +77,76 @@ void SimulationLoop::initializeMap() {
 
         row++;
         map.push_back( newRow );
+    }
+}
+
+void SimulationLoop::cloneMap() {
+    mapClone.clear();
+
+    for ( auto rowIter = map.begin(); rowIter < map.end(); rowIter++ ) {
+        vector<Cell*> currentRow = *rowIter;
+        vector<Cell> rowClone;
+        for ( auto colIter = currentRow.begin(); colIter < currentRow.end(); colIter++ ) {
+            Cell *cell = *colIter;
+            Cell clone(cell->getRow(), cell->getColumn(), cell->getType() );
+            clone.setPopulation( cell->getPopulation() );
+            clone.setPollution( cell->getPollution() );
+            rowClone.push_back( clone );
+        }
+
+        mapClone.push_back( rowClone );
+    }
+}
+
+bool SimulationLoop::mapSimilarToClone() {
+    if ( map.size() != mapClone.size() ) { return false; }
+
+    auto mapRowIter = map.begin();
+    auto cloneRowIter = mapClone.begin();
+    for ( int rowIndex = 0; rowIndex < map.size(); rowIndex++ ) {
+        vector<Cell*> mapRow = *mapRowIter;
+        vector<Cell> cloneRow = *cloneRowIter;
+        if ( mapRow.size() != cloneRow.size() ) { return false; }
+
+        auto mapColIter = mapRow.begin();
+        auto cloneColIter = cloneRow.begin();
+        for ( int colIndex = 0; colIndex < mapRow.size(); colIndex++ ) {
+            Cell *mapCell = *mapColIter;
+            Cell cloneCell = *cloneColIter;
+
+            if ( mapCell->getRow() != cloneCell.getRow() || mapCell->getColumn() != cloneCell.getColumn()
+                    || mapCell->getType() != cloneCell.getType() || mapCell->getPopulation() != cloneCell.getPopulation()
+                    || mapCell->getPollution() != cloneCell.getPollution() ) {
+                return false;
+            }
+
+            mapColIter++;
+            cloneColIter++;
+        }
+
+        mapRowIter++;
+        cloneRowIter++;
+    }
+
+    return true;
+}
+
+void SimulationLoop::doLoop() {
+    Residential residential;
+    Commercial commercial;
+    Industrial industrial;
+    Pollution pollution;
+
+    while ( timestep <= TIME_LIMIT ) {
+        timestep++;
+        cloneMap();
+
+        residential.ResidentialUpdate( map, &availableWorkers );
+        commercial.CommercialUpdate( map, &availableWorkers, &availableGoods );
+        industrial.IndustrialUpdate( map, &availableWorkers, &availableGoods );
+        pollution.PollutionUpdate( map, &availableWorkers, &availableGoods );
+
+        if ( timestep % REFRESH_RATE == 0 ) { printMap(); }
+        if ( mapSimilarToClone() ) { return; }
     }
 }
