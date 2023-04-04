@@ -3,6 +3,9 @@
 
 
 void Residential::ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker){
+    //testing
+    //map.at(5).at(5)->setUpdate(true);
+    //cout<<map.at(5).at(5)->isUpdate()<<endl;
     //start by updating all residential cells from previous timestep with updateCells function
     updateCells(map, availWorker);
     //here, iterate through vector given and update any cell that is yours based on rules provided
@@ -42,14 +45,14 @@ void Residential::updateCells(vector<vector<Cell*>> map, int &availWorker){
     //for loop is over, all cells updated and update variable is reset.
 }
 
-void Residential::ruleCheck(vector<vector<Cell*>> map, int xCoord, int yCoord){
+void Residential::ruleCheck(vector<vector<Cell*>> &map, int xCoord, int yCoord){
     //make a count and compare variable to count the # of cell with pop >= cell pop and compare to the # needed to increase
     int pop = (map.at(xCoord).at(yCoord))->getPopulation();
     int count=0;
     int compare = pop*2;
 
     //growth stops at population 5
-    if(pop == 5){
+    if(pop > 4){
         return;
     }
 
@@ -59,19 +62,21 @@ void Residential::ruleCheck(vector<vector<Cell*>> map, int xCoord, int yCoord){
         compare = 1;
         bool powerAdj = false;
         //iterate around adjacent cells and check for rules
-        for(int x = xCoord-1; x <= xCoord+1; x++)
+        for(int x = xCoord-1; x < xCoord+2; x++)
         {
             for(int y = yCoord-1; y <= yCoord+1; y++)
             {
                 //check if coords are IN BOUNDS and NOT the original cell
-                if(x!=xCoord && y!=yCoord && x>=0 && y>=0 && x<map.size() && y<map.at(x).size()){
+                if((x!=xCoord || y!=yCoord) && x>=0 && y>=0 && x<map.size() && y<map.at(x).size()){
                     //create ptr to cell at coords
                     Cell *cell = map.at(x).at(y);
                     //check if cell is a powerline
-                    if(cell->getType() == POWERLINE) powerAdj = true;
+                    if(cell->getType() == POWERLINE|| cell->getType() == ROAD_OVER_POWERLINE){
+                        powerAdj = true;
+                    }
 
                     //if the cell is a residential, then check the population.
-                    if(cell->getType() == RESIDENTIAL){
+                    else if(cell->getType() == RESIDENTIAL){
                         //check if cell has a population of at least 1
                         if(cell->getPopulation() >= 1) count++;
                     }
@@ -85,6 +90,7 @@ void Residential::ruleCheck(vector<vector<Cell*>> map, int xCoord, int yCoord){
             //then update the cell's update variable
             map.at(xCoord).at(yCoord)->setUpdate(true);
         }
+
         return;
     }
 
@@ -95,7 +101,7 @@ void Residential::ruleCheck(vector<vector<Cell*>> map, int xCoord, int yCoord){
         for(int y = yCoord-1; y <= yCoord+1; y++)
         {
             //check if coords are IN BOUNDS and NOT the original cell
-            if(x!=xCoord && y!=yCoord && x>=0 && y>=0 && x<map.size() && y<map.at(x).size()){
+            if((x!=xCoord || y!=yCoord) && x>=0 && y>=0 && x<map.size() && y<map.at(x).size()){
                 //create ptr to cell at coords
                 Cell *cell = map.at(x).at(y);
                 //check if cell type is residential
@@ -109,6 +115,7 @@ void Residential::ruleCheck(vector<vector<Cell*>> map, int xCoord, int yCoord){
         }
     }
     //check conditions
+
     if(count >= compare)
     {
         //then update the cell's update variable

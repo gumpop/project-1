@@ -15,7 +15,7 @@ public:
 private:
     //add private vars and functions
     void updateCells(vector<vector<Cell*>> map, int &availWorker);
-    void ruleCheck(vector<vector<Cell*>> map, int xCoord, int yCoord);
+    void ruleCheck(vector<vector<Cell*>> &map, int xCoord, int yCoord);
     int population = 0;
 
 };
