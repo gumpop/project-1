@@ -1,12 +1,12 @@
-#include "SimulationLoop.h"
+#include "project-1/simulation-loop/SimulationLoop.h"
 #include <fstream>
 #include <iostream>
-#include "simulation-logic/Commercial.h"
-#include "simulation-logic/Industrial.h"
-#include "simulation-logic/Pollution.h"
-#include "simulation-logic/Residential.h"
-#include "utils/StringSplitter.h"
-#include "utils/CellTypeChars.h"
+#include "project-1/simulation-logic/Commercial.h"
+#include "project-1/simulation-logic/Industrial.h"
+#include "project-1/simulation-logic/Pollution.h"
+#include "project-1/simulation-logic/Residential.h"
+#include "project-1/utils/StringSplitter.h"
+#include "project-1/utils/CellTypeChars.h"
 
 SimulationLoop::SimulationLoop(string regionFileName, int timeLimit, int refreshRate) {
     REGION_FILE_NAME = regionFileName;

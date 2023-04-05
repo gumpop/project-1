@@ -1,6 +1,6 @@
 #include <vector>
 #include <string>
-#include "models/Cell.h"
+#include "project-1/models/Cell.h"
 using namespace std;
 
 class SimulationLoop {

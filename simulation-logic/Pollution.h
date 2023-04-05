@@ -3,7 +3,7 @@
 #define PROJECT_1_POLLUTION_H
 #include <iostream>
 #include <vector>
-#include "models/Cell.h"
+#include "project-1/models/Cell.h"
 
 using namespace std;
 
