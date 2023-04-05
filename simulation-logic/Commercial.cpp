@@ -156,6 +156,8 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
 {
 
     int adjPopulationCounter = 0;
+    int tempAvailWorker = availWorker;
+    int tempAvailGood = availGood;
 
     // testing out using switch case. Grabbing population for that
     int x = map[i][j]->getPopulation();
@@ -164,7 +166,7 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
     //the switch case
     switch(x) {
         case 0:
-            //First rule ****************************************************
+            //First rule ***********************************************************************************************************
 
             //Checking first row
             if(j-1 >= 0){
@@ -212,13 +214,15 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
                 }
             }
 
-            if(foundPowerline && availWorker >= 1 && availGood >= 1)
+            if(foundPowerline && tempAvailWorker >= 1 && tempAvailGood >= 1)
             {
                 map[i][j]->setUpdate(true);
+                tempAvailWorker--;
+                tempAvailWorker--;
                 break;
             }
 
-            // Second rule **************************************************
+            // Second rule *************************************************************************************************************
 
             //Checking first row
             if(j-1 >= 0){
@@ -266,9 +270,11 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
                 }
             }
 
-            if(adjPopulationCounter >= 1 && availWorker >= 1 && availGood >= 1)
+            if(adjPopulationCounter >= 1 && tempAvailWorker >= 1 && tempAvailGood >= 1)
             {
                 map[i][j]->setUpdate(true);
+                tempAvailWorker--;
+                tempAvailGood--;
                 break;
             }
 
@@ -324,9 +330,11 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
                 }
             }
 
-            if(adjPopulationCounter >= 2 && availWorker >= 1 && availGood >= 1)
+            if(adjPopulationCounter >= 2 && tempAvailWorker >= 1 && tempAvailGood >= 1)
             {
                 map[i][j]->setUpdate(true);
+                tempAvailWorker--;
+                tempAvailGood--;
                 break;
             }
 
@@ -346,10 +354,10 @@ void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int &availWorker, int
         for(int j = 0; j != map[i].size(); j++) {
 
 
-            if (availWorker >= 1 && availGood >= 1) {
-                if (map[i][j]->isUpdate()) {
+            if (availWorker >= 1 && availGood >= 1 && map[i][j]->isUpdate()) {
 
-                }
+
+
                 //increment the population
                 map[i][j]->incrementPopulation();
 
@@ -364,7 +372,5 @@ void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int &availWorker, int
 
             }
         }
-
-        break;
     }
 }
