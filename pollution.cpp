@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "pollution.h"
-//#include "cell.h"
+//#include "CellType.h"
 
 using namespace std;
 
@@ -72,23 +72,54 @@ void Pollution::PrintSpecRegion(int startRow, int startCol, int endRow, int endC
     
 }
 
-//Recursive function that calls on each of its neighbors to spread and assign pollution
-void Pollution::RecurCheckNeighbors(int currPollLvl, int currRow, int currCol) {
-    //Base Case: If current pollution level is <= 1 or is > currPollLvl, return.
-    //Otherwise: Set current row and current column in pollution map equal to current pollution level.
-    //           Call each neighbor (in valid domain/range of the map) of the current row/column with 
-    //           the current pollution level decremented by 1 (subtract 1).
+//Function that looks at each of its neighbors to spread and assign pollution
+int Pollution::CheckNeighbors(int currPollution, int currRow, int currCol) {
+    //Set max pollution as current pollution.
+    int maxPollution = currPollution;
+
+    //Apply rules.
+    if () {
+
+    }
+
+    //Return new pollution value.
+    return maxPollution - 1;
 }
 
 //Updates the pollution map to correct integers.
-vector<vector<int>> Pollution::Update() {
-    //TO BE DONE: Pass in vector of a vector of cells.
-    //Iterate through passed in map of cells (rows).
-    //Iterate through column of cells.
-    //Check if cell is of industrial type.
-    //If it is an industrial cell, set corresponding coordinates in the pollution map equal.
-    //to the population of that industrial cell.
+void Pollution::Update(vector<vector<Cell *>> cellMap) {
+    //Create boolean for has updated
+    bool hasUpdated = true;
+    
+    /* //Iterate through passed in map of cells (rows).
+    for (int i = 0; i < cellMap.size(); i++) {
+        //Iterate through column of cells.
+        for (int j = 0; j < cellMap.at(i).size(); j++) {
+            //Check if cell is of industrial type.
+            if (cellMap[i][j]->getType() == INDUSTRIAL) {
+                //If it is an industrial cell, set corresponding coordinates in the pollution map equal.
+                //to the population of that industrial cell.
+                pollMap[i][j] = cellMap[i][j]->getPopulation();
+            }
+            else {
+                pollMap[i][j] = 0;
+            }
+        }
+    } */
+    
     //Pollution map is now ready to have rules applied to it.
+
+    //Check if there has been an update
+    while (hasUpdated == true) {
+        //Iterate through pollution map (row).
+        for (int i = 0; i < pollMap.size(); i++) {
+            //Iterate through column.
+            for (int j = 0; j < pollMap[0].size(); j++) {
+                //Check if neighbors can update
+                CheckNeighbors()
+            }
+        }
+    }
 }
 
 //TESTING MAIN
@@ -97,13 +128,14 @@ int main() {
     Pollution pollution;
 
     //Creating test pollution map
-    vector<int> line1{1,0,3,1,2,0};
-    vector<int> line2{4,0,1,2,3,0};
-    vector<int> line3{0,1,2,1,1,3};
-    vector<int> line4{2,1,3,4,2,1};
-    vector<int> line5{1,0,3,1,2,0};
-    vector<int> line6{4,0,1,2,3,0};
+    vector<int> line1{4,0,0,0,0,0};
+    vector<int> line2{0,4,0,0,0,0};
+    vector<int> line3{0,0,0,0,0,0};
+    vector<int> line4{0,0,0,0,0,0};
+    vector<int> line5{0,0,0,0,0,0};
+    vector<int> line6{4,0,0,0,0,4};
     vector<vector<int>> newPollMap{line1, line2, line3, line4, line5, line6};
+    vector<vector<Cell *>> cellMap(6);
 
     //Assigning internal pollution object variables
     pollution.SetRows(newPollMap.size());
@@ -115,14 +147,13 @@ int main() {
     cout << "Calling PrintPollutionMap():" << endl;
     pollution.PrintPollutionMap();
     cout << endl;
-    cout << "Calling PrintTotalPollution():" << endl;
-    pollution.PrintTotalPollution();
-    cout << endl;
-    cout << "Calling PrintSpecRegion():" << endl;
-    pollution.PrintSpecRegion(1, 1, pollution.GetRows()-2, pollution.GetCols()-2);
+    cout << "Calling Update():" << endl;
+    pollution.Update(cellMap);
+    pollution.PrintPollutionMap();
     cout << endl;
     cout << "Testing done." << endl;
     cout << endl;
+    
 
     return 0;
 }
