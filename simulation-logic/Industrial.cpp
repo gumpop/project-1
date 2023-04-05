@@ -23,7 +23,7 @@ void Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, i
 } 
    
     
-bool Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int &availWorker){
+void Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int &availWorker){
   int powerlinecounter = 0;
   int adjpopcounter = 0;
   
