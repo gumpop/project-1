@@ -2,14 +2,14 @@
 
 //Iterating through the vector and checking to see if a cell is an industrial cell
 void Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood){
-  //Making a bounds for the i variable so no variables are accessed out of the map
-  int boundsi = map.size();
-  
   //Updates from last timestamp the new stuff
   UpdateTimestamp(map, availWorker, availGood);
 
   //Iterating through the map to find the INDUSTRIAL cells
   for(int i = 0;i!=map.size(); i++){
+    //Making a bounds for the i variable so no variables are accessed out of the map
+    int boundsi = map.size();
+    
     for(int j = 0;j!=map[i].size(); j++){
       //Making a bounds for the j variable so no variables are accessed out of the map
       int boundsj = map[i].size();
@@ -26,6 +26,9 @@ void Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, i
 void Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int &availWorker){
   int powerlinecounter = 0;
   int adjpopcounter = 0;
+
+  //Since the update is in the next timestamp, need a variable here to 
+  int availWorkerCheck = availWorker;
   
   //Getting the population of the industrial check placement to do a certain case with a switch
   int x = map[i][j]->getPopulation();
@@ -103,8 +106,9 @@ void Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
         }   
       }
       //Checking if there are 1 or more cells with a population of >= 1 or if there is powerline >= 1
-      if((powerlinecounter >= 1 || adjpopcounter >= 1) && availWorker >= 2){
+      if((powerlinecounter >= 1 || adjpopcounter >= 1) && availWorkerCheck >= 2){
         map[i][j]->setUpdate(true);
+        availWorkerCheck = availWorkerCheck-2;
       }
     break;
 
@@ -157,8 +161,9 @@ void Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
       }
     
       //Checking if there are 2 or more cells with population >= 1
-      if(adjpopcounter >= 2 && availWorker >= 2){
+      if(adjpopcounter >= 2 && availWorkerCheck >= 2){
         map[i][j]->setUpdate(true);
+        availWorkerCheck = availWorkerCheck-2;
       }
     break;
   
@@ -210,8 +215,9 @@ void Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
         }
       }
       //Checking if there are 4 or more cells with population >= 2
-      if(adjpopcounter >= 4 && availWorker >= 2){
+      if(adjpopcounter >= 4 && availWorkerCheck >= 2){
         map[i][j]->setUpdate(true);
+        availWorkerCheck = availWorkerCheck-2;
       }
     break;
   }
@@ -227,6 +233,8 @@ void Industrial::UpdateTimestamp(vector<vector<Cell*>> map, int &availWorker, in
           map[i][j]->incrementPopulation();
           //decrement the available workers
           availWorker = availWorker-2;
+          //incrementing the available goods
+          availGood++;
           //set the update to false for the next timestep
           map[i][j]->setUpdate(false);
         }
