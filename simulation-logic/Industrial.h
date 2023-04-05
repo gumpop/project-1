@@ -9,13 +9,8 @@ using namespace std;
 
 class Industrial{
     public:
-        //Change the variable at the front later to call back the right variable "void"
         void IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood);
-        void IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj);
-        //Test display vector so that I can make sure my code is running properly
-        void DisplayVector(vector<vector<Cell*>> map);
-    private:
-        //add private vars and functions
-        
+        void IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int &availWorker);
+        void UpdateTimestamp(vector<vector<Cell*>> map, int &availWorker, int &availGood);
 };
 #endif //PROJECT_1_INDUSTRIAL_H
