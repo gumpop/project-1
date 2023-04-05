@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "Cell.h"
 
 using namespace std;
 
@@ -49,9 +50,9 @@ class Pollution {
         //Prints map of pollution integers within specified region.
         void PrintSpecRegion(int startRow, int startCol, int endRow, int endCol);
 
-        //Recursive function that calls on each of its neighbors to spread and assign pollution
-        void RecurCheckNeighbors(int currPollLvl, int currRow, int currCol);
+        //Function that looks at each of its neighbors to spread and assign pollution
+        int CheckNeighbors(int currPollution,int currRow, int currCol);
 
         //Updates the pollution map to correct integers.
-        vector<vector<int>> Update();
+        void Update(vector<vector<Cell*>> cellMap);
 };
