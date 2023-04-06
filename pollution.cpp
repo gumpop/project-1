@@ -117,7 +117,7 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
     //Create boolean for if the map has updated.
     bool hasUpdated = true;
     
-    /* //Iterate through passed in map of cells (rows).
+    //Iterate through passed in map of cells (rows).
     for (int i = 0; i < cellMap.size(); i++) {
         //Iterate through column of cells.
         for (int j = 0; j < cellMap.at(i).size(); j++) {
@@ -131,7 +131,7 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
                 pollMap[i][j] = 0;
             }
         }
-    } */
+    }
     
     //Pollution map is now ready to have rules applied to it.
 
@@ -152,40 +152,4 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
             }
         }
     }
-}
-
-//TESTING MAIN
-int main() {
-    //Creating pollution object
-    Pollution pollution(6,6);
-
-    //Creating test pollution map
-    vector<int> line1{0,0,0,0,0,0};
-    vector<int> line2{0,0,0,0,0,0};
-    vector<int> line3{0,0,0,0,0,0};
-    vector<int> line4{0,0,0,0,0,0};
-    vector<int> line5{0,0,0,0,0,0};
-    vector<int> line6{5,0,0,0,0,0};
-    vector<vector<int>> newPollMap{line1, line2, line3, line4, line5, line6};
-    vector<vector<Cell *>> cellMap(6);
-
-    //Assigning internal pollution object variables
-    pollution.SetRows(newPollMap.size());
-    pollution.SetCols(newPollMap.at(0).size());
-    pollution.SetPollMap(newPollMap);
-
-    //Testing print functions
-    cout << endl;
-    cout << "Calling PrintPollutionMap():" << endl;
-    pollution.PrintPollutionMap();
-    cout << endl;
-    cout << "Calling Update():" << endl;
-    pollution.Update(cellMap);
-    pollution.PrintPollutionMap();
-    cout << endl;
-    cout << "Testing done." << endl;
-    cout << endl;
-    
-
-    return 0;
 }
