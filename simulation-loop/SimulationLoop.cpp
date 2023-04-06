@@ -160,7 +160,7 @@ void SimulationLoop::doLoop() {
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) { printMap(); }
         // If map after updates is similar to cloned map before updates, exit
-        if ( mapSimilarToClone() ) { break; }
+        if ( mapSimilarToClone() && timestep != 1 ) { break; }
     }
 
     pollution.Update( map );
