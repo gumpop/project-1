@@ -3,9 +3,6 @@
 
 
 void Residential::ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker){
-    //testing
-    //map.at(5).at(5)->setUpdate(true);
-    //cout<<map.at(5).at(5)->isUpdate()<<endl;
     //start by updating all residential cells from previous timestep with updateCells function
     updateCells(map, availWorker);
     //here, iterate through vector given and update any cell that is yours based on rules provided

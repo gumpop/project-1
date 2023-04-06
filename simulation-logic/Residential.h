@@ -17,6 +17,5 @@ private:
     void updateCells(vector<vector<Cell*>> map, int &availWorker);
     void ruleCheck(vector<vector<Cell*>> &map, int xCoord, int yCoord);
     int population = 0;
-
 };
 #endif //PROJECT_1_RESIDENTIAL_H
