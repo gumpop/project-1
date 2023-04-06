@@ -16,12 +16,6 @@ Pollution::Pollution(int numRows, int numCols) {
     //Assign passed-in values.
     rows = numRows;
     cols = numCols;
-    vector<vector<int>> n(numRows);
-    pollMap = n;
-    for (int i = 0; i < numRows; i++) {
-        vector<int> t(numCols);
-        pollMap[i] = t;
-    }
 }
 
 
@@ -117,6 +111,12 @@ int Pollution::CheckNeighbors(int currPollution, int currRow, int currCol) {
 void Pollution::Update(vector<vector<Cell *>> cellMap) {
     //Create boolean for if the map has updated.
     bool hasUpdated = true;
+    vector<vector<int>> n(numRows);
+    pollMap = n;
+    for (int i = 0; i < numRows; i++) {
+        vector<int> t(numCols);
+        pollMap[i] = t;
+    }
     
     //Iterate through passed in map of cells (rows).
     for (int i = 0; i < cellMap.size(); i++) {
