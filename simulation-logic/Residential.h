@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <vector>
-#include "project-1/models/Cell.h"
+#include "models/Cell.h"
 
 using namespace std;
 
