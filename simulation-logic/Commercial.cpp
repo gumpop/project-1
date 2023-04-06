@@ -20,7 +20,7 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, i
                 CommercialCheck(map, i, j, boundsi, boundsj, availWorker, availGood);
             }
         }
-        cout << endl;
+
     }
 
 

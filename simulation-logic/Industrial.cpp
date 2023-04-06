@@ -19,7 +19,6 @@ void Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, i
         }
     }
   }
-  cout << endl;
 } 
    
     
