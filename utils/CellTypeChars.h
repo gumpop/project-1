@@ -1,4 +1,4 @@
-#include "project-1/models/CellType.h"
+#include "models/CellType.h"
 
 class CellTypeChars {
 public:
