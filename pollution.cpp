@@ -61,20 +61,21 @@ void Pollution::PrintSpecRegion(int startRow, int startCol, int endRow, int endC
     if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols &&
     endRow >= startRow && endCol >= startCol && endRow < rows && endCol < cols) {
         //Iterate through pollution map (row), starting at start row, ending at end row.
+        int sum = 0;
         for (int i = startRow; i <= endRow; i++) {
             //Iterate through column, starting at start column, ending at end column.
             for (int j = startCol; j <= endCol; j++) {
                 //Print value to the screen with proper formatting.
                 cout << pollMap[i][j] << " ";
+                sum += pollMap[i][j];
             }
             cout << endl;
         }
+        cout << "Total Pollution Sum: " << sum << endl;
     }
     else {
         cout << "Specified pollution region is invalid. Please try new bounds." << endl;
     }
-    
-    
 }
 
 //Function that looks at each of its neighbors to spread and assign pollution.
