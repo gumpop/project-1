@@ -142,7 +142,7 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
         //Iterate through pollution map (row).
         for (int i = 0; i < pollMap.size(); i++) {
             //Iterate through column.
-            for (int j = 0; j < pollMap[0].size(); j++) {
+            for (int j = 0; j < pollMap[i].size(); j++) {
                 //Check if neighbors can update
                 int initial = pollMap[i][j];
                 int num = CheckNeighbors(pollMap[i][j], i, j);
