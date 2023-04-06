@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "models/Cell.h"
+#include "Cell.h"
 
 using namespace std;
 

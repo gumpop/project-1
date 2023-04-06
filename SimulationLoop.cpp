@@ -1,12 +1,12 @@
-#include "simulation-loop/SimulationLoop.h"
+#include "SimulationLoop.h"
 #include <fstream>
 #include <iostream>
-#include "simulation-logic/Commercial.h"
-#include "simulation-logic/Industrial.h"
-#include "simulation-logic/Pollution.h"
-#include "simulation-logic/Residential.h"
-#include "utils/StringSplitter.h"
-#include "utils/CellTypeChars.h"
+#include "Commercial.h"
+#include "Industrial.h"
+#include "Pollution.h"
+#include "Residential.h"
+#include "StringSplitter.h"
+#include "CellTypeChars.h"
 
 SimulationLoop::SimulationLoop(string regionFileName, int timeLimit, int refreshRate) {
     REGION_FILE_NAME = regionFileName;
@@ -34,7 +34,8 @@ void SimulationLoop::printMap() {
 
             // If timestep is only zero, only print out the character type of the cell
             if ( timestep == 0 ) {
-                cout << CellTypeChars::getChar(currentCell->getType()) << SPACE;
+   //             cout << CellTypeChars::getChar(currentCell->getType()) << SPACE;
+      cout << CellTypeChars::getChar(currentCell->getType()) << currentCell->getPopulation() << SPACE;
             }
 
             // If current cell is of type residential, commercial, or industrial, and it's population
@@ -45,7 +46,8 @@ void SimulationLoop::printMap() {
             }
 
             else {
-                cout << CellTypeChars::getChar( currentCell->getType() ) << SPACE;
+    //            cout << CellTypeChars::getChar( currentCell->getType() ) << SPACE;
+      cout << CellTypeChars::getChar(currentCell->getType()) << currentCell->getPopulation() << SPACE;
             }
         }
 
@@ -154,14 +156,20 @@ void SimulationLoop::doLoop() {
 
         // Updating the map through each of the methods
         residential.ResidentialUpdate( map, availableWorkers );
+	cout << "residential " << availableWorkers << endl; // ! DEBUG
         commercial.CommercialUpdate( map, availableWorkers, availableGoods );
+	cout << "commercial " << availableWorkers << endl; // ! DEBUG
         industrial.IndustrialUpdate( map, availableWorkers, availableGoods );
+	cout << "industrial " << availableWorkers << endl; // ! DEBUG
 
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) { printMap(); }
         // If map after updates is similar to cloned map before updates, exit
         if ( mapSimilarToClone() && timestep != 1 ) { break; }
+	cout << "mapSimilar() called" << endl; // ! DEBUG
     }
 
+    cout << "almost done" << endl; // ! DEBUG
     pollution.Update( map );
+    cout << "done" << endl; // ! DEBUG
 }

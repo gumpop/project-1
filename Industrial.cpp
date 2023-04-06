@@ -238,9 +238,9 @@ void Industrial::UpdateTimestamp(vector<vector<Cell*>> map, int &availWorker, in
           map[i][j]->setUpdate(false);
         }
       }
-      else{
-        break;
-      }
+ //     else{
+  //      break;
+ //     }
     }
   }
 }

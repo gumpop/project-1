@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "simulation-loop/SimulationLoop.h"
+#include "SimulationLoop.h"
 using namespace std;
 
 int main() {
