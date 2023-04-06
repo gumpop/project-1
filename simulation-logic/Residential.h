@@ -9,6 +9,7 @@
 using namespace std;
 
 class Residential{
+
 public:
     void ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker);
     int getResidentialPopulation();
