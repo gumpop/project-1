@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "pollution.h"
+#include "Pollution.h"
 
 using namespace std;
 
