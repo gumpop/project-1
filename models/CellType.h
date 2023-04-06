@@ -1,3 +1,6 @@
+#ifndef CELLTYPE_H
+#define CELLTYPE_H
+
 enum CellType {
     RESIDENTIAL,
     INDUSTRIAL,
@@ -8,3 +11,5 @@ enum CellType {
     ROAD_OVER_POWERLINE,
     EMPTY
 };
+
+#endif /* CELLTYPE_H */

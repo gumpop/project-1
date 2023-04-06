@@ -3,9 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include "models/Cell.h"
 using namespace std;
-
-#include "Cell.h"
 
 class Industrial{
     public:
