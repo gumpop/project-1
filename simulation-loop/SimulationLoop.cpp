@@ -156,11 +156,12 @@ void SimulationLoop::doLoop() {
         residential.ResidentialUpdate( map, availableWorkers );
         commercial.CommercialUpdate( map, availableWorkers, availableGoods );
         industrial.IndustrialUpdate( map, availableWorkers, availableGoods );
-        pollution.PollutionUpdate( map, availableWorkers, availableGoods );
 
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) { printMap(); }
         // If map after updates is similar to cloned map before updates, exit
-        if ( mapSimilarToClone() ) { return; }
+        if ( mapSimilarToClone() ) { break; }
     }
+
+    pollution.Update( map );
 }

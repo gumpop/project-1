@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "Cell.h"
+#include "models/Cell.h"
 
 using namespace std;
 
