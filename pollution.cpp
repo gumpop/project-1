@@ -1,22 +1,27 @@
 #include <iostream>
 #include <vector>
 #include "pollution.h"
-//#include "CellType.h"
 
 using namespace std;
 
-//Default Constructor
+//Default Constructor.
 Pollution::Pollution() {
     //Assign default values.
     rows = 0;
     cols = 0;
 }
 
-//Parameterized Constructor
+//Parameterized Constructor.
 Pollution::Pollution(int numRows, int numCols) {
     //Assign passed-in values.
     rows = numRows;
     cols = numCols;
+    vector<vector<int>> n(numRows);
+    pollMap = n;
+    for (int i = 0; i < numRows; i++) {
+        vector<int> t(numCols);
+        pollMap[i] = t;
+    }
 }
 
 
@@ -27,7 +32,7 @@ void Pollution::PrintPollutionMap() {
         //Iterate through column.
         for (int j = 0; j < cols; j++) {
             //Print value to the screen with proper formatting.
-            cout << pollMap.at(i).at(j) << " ";
+            cout << pollMap[i][j] << " ";
         }
         cout << endl;
     }
@@ -43,10 +48,10 @@ void Pollution::PrintTotalPollution() {
         //Iterate through column.
         for (int j = 0; j < cols; j++) {
             //Sum current value into sum variable.
-            sum += pollMap.at(i).at(j);
+            sum += pollMap[i][j];
         }
     }
-    //Print final sum
+    //Print final sum.
     cout << "Total Pollution Sum: " << sum << endl;
 }
 
@@ -60,7 +65,7 @@ void Pollution::PrintSpecRegion(int startRow, int startCol, int endRow, int endC
             //Iterate through column, starting at start column, ending at end column.
             for (int j = startCol; j <= endCol; j++) {
                 //Print value to the screen with proper formatting.
-                cout << pollMap.at(i).at(j) << " ";
+                cout << pollMap[i][j] << " ";
             }
             cout << endl;
         }
@@ -72,14 +77,35 @@ void Pollution::PrintSpecRegion(int startRow, int startCol, int endRow, int endC
     
 }
 
-//Function that looks at each of its neighbors to spread and assign pollution
+//Function that looks at each of its neighbors to spread and assign pollution.
 int Pollution::CheckNeighbors(int currPollution, int currRow, int currCol) {
     //Set max pollution as current pollution.
     int maxPollution = currPollution;
 
     //Apply rules.
-    if () {
-
+    if (currRow + 1 < pollMap.size() && currCol + 1 < pollMap[0].size() && pollMap[currRow+1][currCol+1] > maxPollution) {
+        maxPollution = pollMap[currRow+1][currCol+1];
+    }
+    if (currRow + 1 < pollMap.size() && currCol  < pollMap[0].size() && pollMap[currRow+1][currCol] > maxPollution) {
+        maxPollution = pollMap[currRow+1][currCol];
+    }
+    if (currRow + 1 < pollMap.size() && currCol - 1 >= 0 && pollMap[currRow+1][currCol-1] > maxPollution) {
+        maxPollution = pollMap[currRow+1][currCol-1];
+    }
+    if (currRow < pollMap.size() && currCol - 1 >= 0 && pollMap[currRow][currCol-1] > maxPollution) {
+        maxPollution = pollMap[currRow][currCol-1];
+    }
+    if (currRow - 1 >= 0 && currCol - 1 >= 0 && pollMap[currRow-1][currCol-1] > maxPollution) {
+        maxPollution = pollMap[currRow-1][currCol-1];
+    }
+    if (currRow - 1 >= 0 && currCol >= 0 && pollMap[currRow-1][currCol] > maxPollution) {
+        maxPollution = pollMap[currRow-1][currCol];
+    }
+    if (currRow - 1 >= 0 && currCol + 1 < pollMap[0].size() && pollMap[currRow-1][currCol+1] > maxPollution) {
+        maxPollution = pollMap[currRow-1][currCol+1];
+    }
+    if (currRow >= 0 && currCol + 1 < pollMap[0].size() && pollMap[currRow][currCol+1] > maxPollution) {
+        maxPollution = pollMap[currRow][currCol+1];
     }
 
     //Return new pollution value.
@@ -88,7 +114,7 @@ int Pollution::CheckNeighbors(int currPollution, int currRow, int currCol) {
 
 //Updates the pollution map to correct integers.
 void Pollution::Update(vector<vector<Cell *>> cellMap) {
-    //Create boolean for has updated
+    //Create boolean for if the map has updated.
     bool hasUpdated = true;
     
     /* //Iterate through passed in map of cells (rows).
@@ -97,7 +123,7 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
         for (int j = 0; j < cellMap.at(i).size(); j++) {
             //Check if cell is of industrial type.
             if (cellMap[i][j]->getType() == INDUSTRIAL) {
-                //If it is an industrial cell, set corresponding coordinates in the pollution map equal.
+                //If it is an industrial cell, set corresponding coordinates in the pollution map equal
                 //to the population of that industrial cell.
                 pollMap[i][j] = cellMap[i][j]->getPopulation();
             }
@@ -109,14 +135,20 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
     
     //Pollution map is now ready to have rules applied to it.
 
-    //Check if there has been an update
+    //Check if there has been an update.
     while (hasUpdated == true) {
+        hasUpdated = false;
         //Iterate through pollution map (row).
         for (int i = 0; i < pollMap.size(); i++) {
             //Iterate through column.
             for (int j = 0; j < pollMap[0].size(); j++) {
                 //Check if neighbors can update
-                CheckNeighbors()
+                int initial = pollMap[i][j];
+                int num = CheckNeighbors(pollMap[i][j], i, j);
+                if (num > initial) {
+                    pollMap[i][j] = num;
+                    hasUpdated = true;
+                }
             }
         }
     }
@@ -125,15 +157,15 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
 //TESTING MAIN
 int main() {
     //Creating pollution object
-    Pollution pollution;
+    Pollution pollution(6,6);
 
     //Creating test pollution map
-    vector<int> line1{4,0,0,0,0,0};
-    vector<int> line2{0,4,0,0,0,0};
+    vector<int> line1{0,0,0,0,0,0};
+    vector<int> line2{0,0,0,0,0,0};
     vector<int> line3{0,0,0,0,0,0};
     vector<int> line4{0,0,0,0,0,0};
     vector<int> line5{0,0,0,0,0,0};
-    vector<int> line6{4,0,0,0,0,4};
+    vector<int> line6{5,0,0,0,0,0};
     vector<vector<int>> newPollMap{line1, line2, line3, line4, line5, line6};
     vector<vector<Cell *>> cellMap(6);
 
