@@ -1,7 +1,7 @@
 #include "Commercial.h"
 
 
-void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood) {
+void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGood) {
 
     //setting bounds
     int boundsi = map.size();
@@ -17,146 +17,16 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, i
             if (map[i][j]->getType() == COMMERCIAL)
             {
                 // checking for project requirement
-                CommercialCheck(map, i, j, boundsi, boundsj, availWorker, availGood);
+                CommercialCheck(map, i, j, boundsi, boundsj, availWorker, availGood, tempAvailWorker, tempAvailGood);
             }
         }
     }
-
-
-
-    /*
-    int i = 0;
-    int j = 0;
-    for(i = 0; i != map.size(); i++) {
-        for (j = 0; j != map[i].size(); j++){
-            if(map[i][j]->getType() == 2)
-            {
-                // The first rule
-                if(map[i][j]->getPopulation() == 0)
-                {
-                    //checking for adjecent powerline
-                    if(map[i-1][j]->getType() == 4)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-                    if(map[i+1][j]->getType() == 4)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-                    if(map[i][j-1]->getType() == 4)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-                    if(map[i][j+1]->getType() == 4)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-                }
-                // The Second Rule
-                if(map[i][j]->getPopulation() == 0)
-                {
-                    if(map[i+1][j]->getPopulation() > 0)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-
-                    if(map[i-1][j]->getPopulation() > 0)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-
-                    if(map[i][j+1]->getPopulation() > 0)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-
-                    if(map[i][j-1]->getPopulation() > 0)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-                }
-                // The Third Rule
-                if(map[i][j]->getPopulation() == 1)
-                {
-
-                    int populationCounter = 0;
-
-                    //checking adjecent 2 count cell 1+ population
-                    if(map[i+1][j]->getPopulation() > 0)
-                    {
-                        populationCounter++;
-                    }
-
-                    if(map[i-1][j]->getPopulation() > 0)
-                    {
-                        populationCounter++;
-                    }
-
-                    if(map[i][j+1]->getPopulation() > 0)
-                    {
-                        populationCounter++;
-                    }
-
-                    if(map[i][j-1]->getPopulation() > 0)
-                    {
-                        populationCounter++;
-                    }
-
-                    if(populationCounter >= 2)
-                    {
-                        // checking for 1 available worker and good
-                        if(map[i][j]->getWorker() == 1 && map[i][j]->getResource() == 1)
-                        {
-
-                        }
-                    }
-
-                }
-            }
-        }
-    }
-     */
-
 }
 
-void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi,int boundsj, int &availWorker, int availGood)
+void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGood)
 {
 
     int adjPopulationCounter = 0;
-    int tempAvailWorker = availWorker;
-    int tempAvailGood = availGood;
 
     // testing out using switch case. Grabbing population for that
     int x = map[i][j]->getPopulation();
@@ -213,11 +83,11 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
                 }
             }
 
-            if(foundPowerline && tempAvailWorker >= 1 && tempAvailGood >= 1)
+            if(foundPowerline == true && tempAvailWorker >= 1 && tempAvailGood >= 1)
             {
                 map[i][j]->setUpdate(true);
                 tempAvailWorker--;
-                tempAvailWorker--;
+                tempAvailGood--;
                 break;
             }
 
@@ -353,9 +223,7 @@ void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int &availWorker, int
         for(int j = 0; j != map[i].size(); j++) {
 
 
-            if (availWorker >= 1 && availGood >= 1 && map[i][j]->isUpdate()) {
-
-
+            if (map[i][j]->isUpdate() && map[i][j]->getType() == COMMERCIAL) {
 
                 //increment the population
                 map[i][j]->incrementPopulation();

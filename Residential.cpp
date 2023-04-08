@@ -2,9 +2,9 @@
 #include "Residential.h"
 
 
-void Residential::ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker){
+void Residential::ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker, int &tempAvailWorker){
     //start by updating all residential cells from previous timestep with updateCells function
-    updateCells(map, availWorker);
+    updateCells(map, availWorker, tempAvailWorker);
     //here, iterate through vector given and update any cell that is yours based on rules provided
     //start iterating with nested for loop
     for(int i=0; i<map.size(); i++){
@@ -20,7 +20,7 @@ void Residential::ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker)
 }
 
 //updateCells goes through the vector and updates residential cells based on the update var of the cell
-void Residential::updateCells(vector<vector<Cell*>> map, int &availWorker){
+void Residential::updateCells(vector<vector<Cell*>> map, int &availWorker, int &tempAvailWorker){
     for(int i=0; i<map.size(); i++){
         for(int j=0; j<map.at(i).size(); j++){
             //IF the cell is a residential cell, then proceed.
@@ -31,6 +31,8 @@ void Residential::updateCells(vector<vector<Cell*>> map, int &availWorker){
                     map.at(i).at(j)->incrementPopulation();
                     //total residential population increased.
                     population++;
+                    //incrementing temporary available worker
+                    tempAvailWorker++;
                     //total available workers increased
                     availWorker++;
                     //set the update value to false once updated.

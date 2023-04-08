@@ -3,7 +3,6 @@
 #include <iostream>
 #include "Commercial.h"
 #include "Industrial.h"
-#include "Pollution.h"
 #include "Residential.h"
 #include "StringSplitter.h"
 #include "CellTypeChars.h"
@@ -16,17 +15,11 @@ SimulationLoop::SimulationLoop(string regionFileName, int timeLimit, int refresh
     initializeMap();
     printMap();
     doLoop();
+    end();
 }
 
 void SimulationLoop::printMap() {
-    cout << endl;
-    // If isn't the zeroth timestep, output more statistics
-    if ( timestep != 0 ) {
-        cout << "Timestep: " << timestep << endl;
-        cout << "Available Workers: " << availableWorkers << endl;
-        cout << "Available Goods: " << availableGoods << endl;
-    }
-    cout << endl;
+    cout << endl << endl;
     for ( auto rowIter = map.begin(); rowIter < map.end(); rowIter++ ) {
         vector<Cell*> currentRow = *rowIter;
         for ( auto colIter = currentRow.begin(); colIter < currentRow.end(); colIter++ ) {
@@ -34,8 +27,7 @@ void SimulationLoop::printMap() {
 
             // If timestep is only zero, only print out the character type of the cell
             if ( timestep == 0 ) {
-   //             cout << CellTypeChars::getChar(currentCell->getType()) << SPACE;
-      cout << CellTypeChars::getChar(currentCell->getType()) << currentCell->getPopulation() << SPACE;
+                cout << CellTypeChars::getChar(currentCell->getType()) << SPACE;
             }
 
             // If current cell is of type residential, commercial, or industrial, and it's population
@@ -46,14 +38,99 @@ void SimulationLoop::printMap() {
             }
 
             else {
-    //            cout << CellTypeChars::getChar( currentCell->getType() ) << SPACE;
-      cout << CellTypeChars::getChar(currentCell->getType()) << currentCell->getPopulation() << SPACE;
+                cout << CellTypeChars::getChar( currentCell->getType() ) << SPACE;
             }
         }
 
         cout << endl;
     }
     cout << endl;
+}
+
+void SimulationLoop::end() {
+    // Outputting final region
+    cout << endl << endl << "Final Region State:" << endl;
+    printMap();
+
+    // Getting the total population and regional populations
+    int totalPop = 0, residentialPop = 0, commercialPop = 0, industrialPop = 0;
+    for ( auto rowIter = map.begin(); rowIter < map.end(); rowIter++ ) {
+        vector<Cell*> currentRow = *rowIter;
+        for ( auto colIter = currentRow.begin(); colIter < currentRow.end(); colIter++ ) {
+            Cell *currentCell = *colIter;
+            totalPop += currentCell->getPopulation();
+            if ( currentCell->getType() == RESIDENTIAL ) { residentialPop += currentCell->getPopulation(); }
+            else if ( currentCell->getType() == COMMERCIAL ) { commercialPop += currentCell->getPopulation(); }
+            else if ( currentCell->getType() == INDUSTRIAL ) { industrialPop += currentCell->getPopulation(); }
+        }
+    }
+
+    // Outputting final region pollution map & getting total pollution
+    int totalPollution = 0;
+    cout << "Pollution Map:" << endl;
+    for ( int i = 0; i < pollution.GetPollMap().size(); i++ ) {
+        vector<int> currentRow = pollution.GetPollMap().at( i );
+        for ( int pollutionValue : currentRow ) {
+            cout << pollutionValue << SPACE;
+            totalPollution += pollutionValue;
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+    // Outputting final region stats
+    cout << "Final Region Stats:" << endl;
+    cout << "Population: " << totalPop << endl;
+    cout << "\tResidential Population: " << residentialPop << endl;
+    cout << "\tCommercial Population: " << commercialPop << endl;
+    cout << "\tIndustrial Population: " << industrialPop << endl;
+    cout << "Total Pollution: " << totalPollution << endl << endl;
+
+    // Prompting for area of closer inspection and outputting stats about that area
+    int xOne = -1, xTwo = -1, yOne = -1, yTwo = -1;
+    while ( xOne == -1 ) {
+        cout << "Where would you like to inspect closer (map starts at 0, 0, input as x1 y1 x2 y2): ";
+        cin >> xOne;
+        cin >> yOne;
+        cin >> xTwo;
+        cin >> yTwo;
+
+        if ( yOne < 0 || yOne >= map.size() || yTwo < 0 || yTwo >= map.size() || xOne < 0 || xTwo < 0 ) {
+            cout << "Invalid coordinates" << endl << endl;
+            xOne = xTwo = yOne = yTwo = -1;
+            continue;
+        }
+
+        vector<Cell*> rowOne = map.at( yOne );
+        vector<Cell*> rowTwo = map.at( yTwo );
+
+        if ( xOne >= rowOne.size() || xTwo >= rowTwo.size() ) {
+            cout << "Invalid coordinates" << endl << endl;
+            xOne = xTwo = yOne = yTwo = -1;
+            continue;
+        }
+
+        int resPop = 0, commPop = 0, indPop = 0;
+        int totalPoll = 0;
+        for ( int i = yOne; i <= yTwo; i++ ) {
+            vector<Cell*> row = map.at( i );
+            for ( int j = xOne; j <= xTwo; j++ ) {
+                Cell* cell = row.at( j );
+                totalPoll += pollution.GetPollMap().at( i ).at( j );
+                if ( cell->getType() == RESIDENTIAL ) { resPop += cell->getPopulation(); }
+                else if ( cell->getType() == COMMERCIAL ) { commPop += cell->getPopulation(); }
+                else if ( cell->getType() == INDUSTRIAL ) { indPop += cell->getPopulation(); }
+            }
+        }
+
+        cout << "Specified Region Stats:" << endl;
+        cout << "Population: " << resPop + commPop + indPop << endl;
+        cout << "\tResidential Population: " << resPop << endl;
+        cout << "\tCommercial Population: " << commPop << endl;
+        cout << "\tIndustrial Population: " << indPop << endl;
+        cout << "Total Pollution: " << totalPoll << endl << endl;
+    }
+
 }
 
 void SimulationLoop::initializeMap() {
@@ -147,7 +224,6 @@ void SimulationLoop::doLoop() {
     Residential residential;
     Commercial commercial;
     Industrial industrial;
-    Pollution pollution;
 
     while ( timestep <= TIME_LIMIT ) {
         timestep++;
@@ -155,21 +231,21 @@ void SimulationLoop::doLoop() {
         cloneMap();
 
         // Updating the map through each of the methods
-        residential.ResidentialUpdate( map, availableWorkers );
-	cout << "residential " << availableWorkers << endl; // ! DEBUG
-        commercial.CommercialUpdate( map, availableWorkers, availableGoods );
-	cout << "commercial " << availableWorkers << endl; // ! DEBUG
-        industrial.IndustrialUpdate( map, availableWorkers, availableGoods );
-	cout << "industrial " << availableWorkers << endl; // ! DEBUG
+        residential.ResidentialUpdate( map, availableWorkers, tempAvailWorkers );
+        commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods);
+        industrial.IndustrialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods);
 
         // If needing to print map, print it
-        if ( timestep % REFRESH_RATE == 0 ) { printMap(); }
+        if ( timestep % REFRESH_RATE == 0 ) {
+            cout << "Timestep: " << timestep << endl;
+            cout << "Available Workers: " << availableWorkers << endl;
+            cout << "Available Goods: " << availableGoods << endl;
+            printMap();
+        }
         // If map after updates is similar to cloned map before updates, exit
         if ( mapSimilarToClone() && timestep != 1 ) { break; }
-	cout << "mapSimilar() called" << endl; // ! DEBUG
     }
 
-    cout << "almost done" << endl; // ! DEBUG
+    // Updating pollution
     pollution.Update( map );
-    cout << "done" << endl; // ! DEBUG
 }

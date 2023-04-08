@@ -11,11 +11,11 @@ using namespace std;
 class Residential{
 
 public:
-    void ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker);
+    void ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker, int &tempAvailWorker);
     int getResidentialPopulation();
 private:
     //add private vars and functions
-    void updateCells(vector<vector<Cell*>> map, int &availWorker);
+    void updateCells(vector<vector<Cell*>> map, int &availWorker, int &tempAvailWorker);
     void ruleCheck(vector<vector<Cell*>> &map, int xCoord, int yCoord);
     int population = 0;
 };
