@@ -86,6 +86,13 @@ void SimulationLoop::end() {
     cout << "\tIndustrial Population: " << industrialPop << endl;
     cout << "Total Pollution: " << totalPollution << endl << endl;
 
+    // Outputting final persons
+    for ( auto personIter = peopleList.begin(); personIter < peopleList.end(); personIter++ ) {
+        Person* person = *personIter;
+        person->printPerson();
+        cout << endl;
+    }
+
     // Prompting for area of closer inspection and outputting stats about that area
     int xOne = -1, xTwo = -1, yOne = -1, yTwo = -1;
     while ( xOne == -1 ) {
@@ -231,9 +238,9 @@ void SimulationLoop::doLoop() {
         cloneMap();
 
         // Updating the map through each of the methods
-        residential.ResidentialUpdate( map, availableWorkers, tempAvailWorkers );
-        commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods);
-        industrial.IndustrialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods);
+        residential.ResidentialUpdate( map, availableWorkers, tempAvailWorkers, peopleList );
+        commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList );
+	    industrial.IndustrialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList, peopleListCounter );
 
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) {

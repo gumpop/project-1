@@ -2,6 +2,7 @@
 #include <string>
 #include "Cell.h"
 #include "Pollution.h"
+#include "Person.h"
 using namespace std;
 
 class SimulationLoop {
@@ -17,10 +18,13 @@ private:
     Pollution pollution;
     int timestep = 0;
     int availableWorkers = 0;
+    vector<Person*> peopleList;
     int availableGoods = 0;
 
     int tempAvailWorkers = 0;
     int tempAvailGoods = 0;
+
+    int peopleListCounter = 0; //ADDED for Industrial
 
 
     void printMap();

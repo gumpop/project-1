@@ -46,10 +46,38 @@ void Cell::setUpdate( bool b ) {
     update = b;
 }
 
+bool Cell::getCommExplored() {
+    return commercialExplored;
+}
+
+void Cell::setCommExplored( bool b ) {
+    commercialExplored = b;
+}
+
+int Cell::getJobType() {
+    return jobType;
+}
+
+void Cell::setJobType(int x) {
+    jobType = x;
+}
+
+
 bool Cell::isUpdatePollution() {
     return updatePollution;
 }
 
 void Cell::setUpdatePollution( bool b ) {
     updatePollution = b;
+}
+
+void Cell::setIndustrialWorkerZone(){
+  if(zone != (TECH) && zone != (AGRICULTURAL) && zone != (CONSTRUCTION) && zone != (EDUCATIONAL) && zone != (ENTERTAINMENT)){
+    int zonenum = ((rand() %5) +1);
+    zone = static_cast<IndustrialWorkerZone>(zonenum);
+  }
+}
+
+IndustrialWorkerZone Cell::getIndustrialZone() {
+    return zone;
 }

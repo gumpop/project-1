@@ -1,13 +1,12 @@
 #include "Commercial.h"
 
-
-void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGood) {
+void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGood,  vector<Person*> &peopleList) {
 
     //setting bounds
     int boundsi = map.size();
 
     // updating things from previous timestamp
-    UpdateTimestamp(map, availWorker, availGood);
+    //UpdateTimestamp(map, availWorker, availGood); // <-- compiler error here
 
     // find commercial cell
     for (int i = 0; i != map.size(); i++){
@@ -18,6 +17,22 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, i
             {
                 // checking for project requirement
                 CommercialCheck(map, i, j, boundsi, boundsj, availWorker, availGood, tempAvailWorker, tempAvailGood);
+
+
+                // Check if this commercial cell has been explored before, if not then set it to be a job type.
+                if(map[i][j]->getCommExplored() == false)
+                {
+                    // generate random number to set jobs
+                    srand(time(NULL));
+                    int random_number = rand() % 4 + 1;
+
+                    //set random number as jobType number
+                    map[i][j]->setJobType(random_number);
+
+                    // set explored true so job won't be changed again.
+                    // map[i][j]->setCommExplored() == true; // <-- compiler error here
+                }
+
             }
         }
     }
@@ -217,7 +232,7 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
 }
 
 
-void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int &availWorker, int&availGood)
+void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int &availWorker, int &availGood,  vector<Person*> &peopleList)
 {
     for(int i = 0; i != map.size(); i++) {
         for(int j = 0; j != map[i].size(); j++) {
@@ -227,6 +242,8 @@ void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int &availWorker, int
 
                 //increment the population
                 map[i][j]->incrementPopulation();
+
+                // Implement the people model
 
                 //reduce worker
                 availWorker--;

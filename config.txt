@@ -1,3 +1,3 @@
-Region Layout:/nfs/home/STUDENTS/rrc0138/csce2110/Project1/region.csv
+Region Layout:region.csv
 Time Limit:20
 Refresh Rate:1
