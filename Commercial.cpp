@@ -30,7 +30,7 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, i
                     map[i][j]->setJobType(random_number);
 
                     // set explored true so job won't be changed again.
-                    // map[i][j]->setCommExplored() == true; // <-- compiler error here
+                    map[i][j]->setCommExplored(true); // <-- fixed compiler error
                 }
 
             }
