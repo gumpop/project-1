@@ -35,5 +35,5 @@ private:
     void doLoop();
 
 public:
-    SimulationLoop( string regionFileName, int timeLimit, int refreshRate );
+    SimulationLoop();
 };
