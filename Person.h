@@ -40,7 +40,7 @@ class Person {
     void setSalary( int x) { salary = x; }
     int getHappiness() { return happiness; }
     void setHappiness( int x) { happiness = x; }
-    int getAge() { return happiness; }
+    int getAge() { return age; }
     void setAge( int x) { age = x; }
 //    Cell* getHomeCell() {return home; }
 //    void setHomeCell(Cell* cell) { home = cell; }

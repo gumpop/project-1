@@ -2,6 +2,7 @@
 #include <string>
 #include "Cell.h"
 #include "Pollution.h"
+#include "Good.h"//ADDED
 #include "Person.h"
 using namespace std;
 
@@ -18,8 +19,10 @@ private:
     Pollution pollution;
     int timestep = 0;
     int availableWorkers = 0;
-    vector<Person*> peopleList;
     int availableGoods = 0;
+
+    vector<Person*> peopleList;
+    vector<Good*> goodList; //ADDED
 
     int tempAvailWorkers = 0;
     int tempAvailGoods = 0;

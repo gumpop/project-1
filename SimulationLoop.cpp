@@ -240,7 +240,7 @@ void SimulationLoop::doLoop() {
         // Updating the map through each of the methods
         residential.ResidentialUpdate( map, availableWorkers, tempAvailWorkers, peopleList );
         commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList );
-	    industrial.IndustrialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList, peopleListCounter );
+	    industrial.IndustrialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList, peopleListCounter, goodList);
 
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) {
