@@ -81,3 +81,14 @@ void Cell::setIndustrialWorkerZone(){
 IndustrialWorkerZone Cell::getIndustrialZone() {
     return zone;
 }
+void Cell::printAllResidents(){
+    if(popList.empty()){
+        cout<<"No people work or live in this cell."<<endl;
+        return;
+    }
+    cout<<"People in this cell: "<<endl;
+    for(int x=0; x<popList.size(); x++){
+        popList.at(x)->printPerson();
+    }
+    cout<<endl;
+}

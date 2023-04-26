@@ -25,8 +25,9 @@ class Person {
         double salary;
         int happiness;
         int age;
-//        Cell* home;
-//        Cell* work;
+        bool isEmployed;
+        bool employedNextTimestep;
+
     public:
     Person();
     //non alterables--do not need setter functions
@@ -42,15 +43,15 @@ class Person {
     void setHappiness( int x) { happiness = x; }
     int getAge() { return happiness; }
     void setAge( int x) { age = x; }
-//    Cell* getHomeCell() {return home; }
-//    void setHomeCell(Cell* cell) { home = cell; }
-//    Cell* getWorkCell() {return work; }
-//    void setWorkCell(Cell* cell) { work = cell; }
     //special function for usability
     void incAge() { age=age+5; }
 
     void printPerson();
-
+    //converts types to strings
+    string religionToString();
+    string raceToString();
+    string genderToString();
+    void setDemographics();
 
 };
 

@@ -43,6 +43,7 @@ public:
     void setIndustrialWorkerZone(); //ADDED 
     IndustrialWorkerZone getIndustrialZone(); //ADDED 
     void addToPopList(Person *add) { popList.push_back(add); }
+    void printAllResidents();
 };
 
 #endif /* CELL_H */
