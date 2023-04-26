@@ -43,6 +43,11 @@ class Person {
     void setHappiness( int x) { happiness = x; }
     int getAge() { return happiness; }
     void setAge( int x) { age = x; }
+    bool getEmployed() {return isEmployed;}
+    void setEmployed(bool e) {isEmployed=e;}
+    bool getEmployedNext() {return employedNextTimestep;}
+    void setEmployedNext(bool e) {employedNextTimestep=e;}
+
     //special function for usability
     void incAge() { age=age+5; }
 
