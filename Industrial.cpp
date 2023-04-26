@@ -1,9 +1,9 @@
 #include "Industrial.h"
 
 //Iterating through the vector and checking to see if a cell is an industrial cell
-void Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGoods, vector<Person*> &peopleList, int &peopleListCounter){
+void Industrial::IndustrialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGoods, vector<Person*> &peopleList, int &peopleListCounter, vector<Good*> &goodList){
     //Updates from last timestamp the new stuff
-    UpdateTimestamp(map, availWorker, availGood, peopleList, peopleListCounter);
+    UpdateTimestamp(map, availWorker, availGood, peopleList, peopleListCounter, goodList);
 
     //Iterating through the map to find the INDUSTRIAL cells
     for(int i = 0;i!=map.size(); i++){
@@ -229,7 +229,7 @@ void Industrial::IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int bo
 }
 
 //Function to update the timestamp for the previous edits that need to be made
-void Industrial::UpdateTimestamp(vector<vector<Cell*>> map, int &availWorker, int &availGood, vector<Person*> &peopleList, int &peopleListCounter){
+void Industrial::UpdateTimestamp(vector<vector<Cell*>> map, int &availWorker, int &availGood, vector<Person*> &peopleList, int &peopleListCounter, vector<Good*> &goodList){
     for(int i = 0;i!=map.size(); i++){
         for(int j = 0;j!=map[i].size(); j++){
             if(availWorker >= 2){
@@ -237,27 +237,53 @@ void Industrial::UpdateTimestamp(vector<vector<Cell*>> map, int &availWorker, in
                     //Setting the work cell to the current cell that is there
     //                peopleList.at(peopleListCounter)->setWorkCell(map[i][j]); // <-- compiler error here
 
+                    //increment the population
+                    map[i][j]->incrementPopulation();
+                    
+                    //Making a new good for the worker
+                    Good *good = new Good();
+
                     //Setting the person's salary based on the zone they are working include
                     //Salaries are random for now, will change this in final turn in
                     if(map[i][j]->getIndustrialZone() == TECH){
                         peopleList.at(peopleListCounter)->setSalary(10000);
+                        good->setAvailable(true);
+                        good->setType("electronic");
                     }else if(map[i][j]->getIndustrialZone() == AGRICULTURAL){
                         peopleList.at(peopleListCounter)->setSalary(5000);
+                        good->setAvailable(true);
+                        good->setType("veggie");
                     }else if(map[i][j]->getIndustrialZone() == CONSTRUCTION){
                         peopleList.at(peopleListCounter)->setSalary(20000);
+                        good->setAvailable(true);
+                        good->setType("tool");
                     }else if(map[i][j]->getIndustrialZone() == EDUCATIONAL){
                         peopleList.at(peopleListCounter)->setSalary(2000);
+                        good->setAvailable(true);
+                        good->setType("book");
                     }else if(map[i][j]->getIndustrialZone() == ENTERTAINMENT){
                         peopleList.at(peopleListCounter)->setSalary(10000);
+                        good->setAvailable(true);
+                        good->setType("toy");
                     }
+                    //Pushing the good to the back of the list
+                    goodList.push_back(good);
 
-                    //increment the population
-                    map[i][j]->incrementPopulation();
-
+                    //incrementing the available goods
+                    availGood++; //Delete this when the upper thing is finished
                     //decrement the available workers
                     availWorker = availWorker-2;
-                    //incrementing the available goods
-                    availGood++;
+                    
+                    //Change this so it does not update every single time 
+                    //age will change at every timestep
+                    for(int i=0;i<peopleListCounter;i++){
+                        //add something to reset the salary for people who are 60 and die
+                        int temp = peopleList.at(peopleListCounter)->getAge();
+                        if(temp/5 > 5){
+                        int salary = peopleList.at(peopleListCounter)->getSalary();
+                        peopleList.at(peopleListCounter)->setSalary(salary*(1.1));
+                        }
+                    }
 
                     //set the update to false for the next timestep
                     map[i][j]->setUpdate(false);
