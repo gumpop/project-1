@@ -51,6 +51,7 @@ class Person {
     string religionToString();
     string raceToString();
     string genderToString();
+    //helper function for constructor
     void setDemographics();
 
 };

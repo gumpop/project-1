@@ -57,6 +57,7 @@ string Person::genderToString(){
     return "Female";
 }
 void Person::setDemographics(){
+    //all based on data above
     //set religion types
 
     //set race types
