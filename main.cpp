@@ -7,7 +7,13 @@ int main() {
     // Start the simulation loop
     SimulationLoop simLoopOne;
 
-    cout << endl << endl << "City #2:" << endl << endl;
+    cout << "Would you like to do a second city? (y/n) ";
+    string cont;
+    cin >> cont;
+    if ( cont == "n" ) { return 0; }
 
+    cout << endl << endl << "City #2:" << endl << endl;
     SimulationLoop simLoopTwo;
+
+    return 0;
 }
