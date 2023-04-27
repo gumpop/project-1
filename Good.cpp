@@ -16,6 +16,14 @@ bool Good::getAvailable(){
   return available;
 }
 
+void Good::setAvailableNext(bool x){
+  availableNext = x;
+}
+
+bool Good::getAvailableNext(){
+  return available;
+}
+
 void Good::setType(string x){
   type = x;
 }
