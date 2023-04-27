@@ -185,51 +185,29 @@ void SimulationLoop::end() {
     cout << "Average Happiness: " << averageHappiness << endl;
     cout << endl;
 
-    // Prompting for area of closer inspection and outputting stats about that area
-    int xOne = -1, xTwo = -1, yOne = -1, yTwo = -1;
-    while ( xOne == -1 ) {
-        cout << "Where would you like to inspect closer (map starts at 0, 0, input as x1 y1 x2 y2): ";
-        cin >> xOne;
-        cin >> yOne;
-        cin >> xTwo;
-        cin >> yTwo;
+    // Prompting for a cell of closer inspection and outputting the people who live/work in that cell
+    int continueLoop = 1;
+    while ( continueLoop == 1 ) {
+        int x = -1, y = -1;
+        cout << "Which cell would you like to see the people who live/work there? (map starts at 0, 0, input as x1 y1. Input -1 -1 to stop): ";
+        cin >> x;
+        cin >> y;
 
-        if ( yOne < 0 || yOne >= map.size() || yTwo < 0 || yTwo >= map.size() || xOne < 0 || xTwo < 0 ) {
+        if ( x == -1 || y == -1 ) { break; }
+
+        if ( x < 0 || y < 0 || y >= map.size() ) {
             cout << "Invalid coordinates" << endl << endl;
-            xOne = xTwo = yOne = yTwo = -1;
             continue;
         }
 
-        vector<Cell*> rowOne = map.at( yOne );
-        vector<Cell*> rowTwo = map.at( yTwo );
-
-        if ( xOne >= rowOne.size() || xTwo >= rowTwo.size() ) {
+        vector<Cell*> row = map.at( y );
+        if ( x >= row.size() ) {
             cout << "Invalid coordinates" << endl << endl;
-            xOne = xTwo = yOne = yTwo = -1;
             continue;
         }
 
-        int resPop = 0, commPop = 0, indPop = 0;
-        int totalPoll = 0;
-        for ( int i = yOne; i <= yTwo; i++ ) {
-            vector<Cell*> row = map.at( i );
-            for ( int j = xOne; j <= xTwo; j++ ) {
-                Cell* cell = row.at( j );
-                totalPoll += pollution.GetPollMap().at( i ).at( j );
-                if ( cell->getType() == RESIDENTIAL ) { resPop += cell->getPopulation(); }
-                else if ( cell->getType() == COMMERCIAL ) { commPop += cell->getPopulation(); }
-                else if ( cell->getType() == INDUSTRIAL ) { indPop += cell->getPopulation(); }
-            }
-        }
-
-        cout << "Specified Region Stats:" << endl;
-        cout << "Population: " << resPop + commPop + indPop << endl;
-//        cout << "\tResidential Population: " << resPop << endl;
-//        cout << "\tCommercial Population: " << commPop << endl;
-//        cout << "\tIndustrial Population: " << indPop << endl;
-        cout << "Total Pollution: " << totalPoll << endl << endl;
+        row.at( x )->printAllResidents();
     }
-
 }
 
 void SimulationLoop::initializeMap() {
