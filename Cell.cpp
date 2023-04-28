@@ -89,6 +89,7 @@ void Cell::printAllResidents(){
     cout<<"People in this cell: "<<endl;
     for(int x=0; x<popList.size(); x++){
         popList.at(x)->printPerson();
+        cout<<endl;
     }
     cout<<endl;
 } //should use to "Zoom in" on a single cell
