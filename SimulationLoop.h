@@ -33,6 +33,7 @@ private:
     void cloneMap();
     bool mapSimilarToClone();
     void doLoop();
+    void ageWorkers();
 
 public:
     SimulationLoop( string regionFileName, int timeLimit, int refreshRate );

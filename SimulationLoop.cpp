@@ -242,6 +242,7 @@ void SimulationLoop::doLoop() {
         commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList );
 	    industrial.IndustrialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList, peopleListCounter );
 
+        ageWorkers();
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) {
             cout << "Timestep: " << timestep << endl;
@@ -255,4 +256,19 @@ void SimulationLoop::doLoop() {
 
     // Updating pollution
     pollution.Update( map );
+}
+
+void SimulationLoop::ageWorkers() {
+    //iterate through list and age all workers
+    for(int x=0; x<peopleList.size(); x++){
+        peopleList.at(x)->incAge();
+        //if the person is 75 after this, they "die" and are replaced by a newer, younger worker(at the same workplace), just like the real world
+        if(peopleList.at(x)->getAge()>=75){
+            //reset demographics, age, happiness, and names
+            peopleList.at(x)->setDemographics();
+            peopleList.at(x)->setAge(25);
+            peopleList.at(x)->setHappiness(60);
+            peopleList.at(x)->randNames();
+        }
+    }
 }

@@ -58,6 +58,7 @@ class Person {
     string genderToString();
     //helper function for constructor
     void setDemographics();
+    void randNames();
 
 };
 
