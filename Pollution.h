@@ -55,7 +55,4 @@ class Pollution {
 
         //Updates the pollution map to correct integers.
         void Update(vector<vector<Cell*>> cellMap);
-
-        //Checks if there is pollution greater than 1 nearby target coordinates.
-        bool PollutionNearby(int x, int y);
 };
