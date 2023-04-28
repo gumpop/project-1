@@ -2,9 +2,9 @@
 #include "Residential.h"
 
 
-void Residential::ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker, int &tempAvailWorker, vector<Person*> &peopleList){
+void Residential::ResidentialUpdate(vector<vector<Cell*>> map, vector<Person*> &peopleList){
     //start by updating all residential cells from previous timestep with updateCells function
-    updateCells(map, availWorker, tempAvailWorker, peopleList);
+    updateCells(map, peopleList);
     //here, iterate through vector given and update any cell that is yours based on rules provided
     //start iterating with nested for loop
     for(int i=0; i<map.size(); i++){
@@ -20,7 +20,7 @@ void Residential::ResidentialUpdate(vector<vector<Cell*>> map, int &availWorker,
 }
 
 //updateCells goes through the vector and updates residential cells based on the update var of the cell
-void Residential::updateCells(vector<vector<Cell*>> map, int &availWorker, int &tempAvailWorker, vector<Person*> &peopleList){
+void Residential::updateCells(vector<vector<Cell*>> map, vector<Person*> &peopleList){
     for(int i=0; i<map.size(); i++){
         for(int j=0; j<map.at(i).size(); j++){
             //IF the cell is a residential cell, then proceed.
@@ -38,10 +38,9 @@ void Residential::updateCells(vector<vector<Cell*>> map, int &availWorker, int &
 
                     //total residential population increased.
                     population++;
-                    //incrementing temporary available worker
-                    tempAvailWorker++;
-                    //total available workers increased
-                    availWorker++;
+                    //setting the person to be checked for a job next within commercial and industrial
+                    tempPerson->setEmployedNext(true);
+                    
                     //add person to global person list
                     peopleList.push_back(tempPerson);
                     //set the update value to false once updated.

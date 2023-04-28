@@ -238,7 +238,7 @@ void SimulationLoop::doLoop() {
         cloneMap();
 
         // Updating the map through each of the methods
-        residential.ResidentialUpdate( map, availableWorkers, tempAvailWorkers, peopleList ); //REMOVE  TEMP & AVAILWORKERS LATER
+        residential.ResidentialUpdate( map, peopleList );
         commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList ); //REMOVE  TEMP & AVAILWORKERS LATER
 	    industrial.IndustrialUpdate( map, peopleList, peopleListCounter, goodList);
 
