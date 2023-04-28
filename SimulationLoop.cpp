@@ -264,7 +264,8 @@ void SimulationLoop::doLoop() {
             }
             temp++;
             size--;
-          }//ADDED
+          }
+
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) {
             cout << "Timestep: " << timestep << endl;

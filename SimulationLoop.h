@@ -2,7 +2,7 @@
 #include <string>
 #include "Cell.h"
 #include "Pollution.h"
-#include "Good.h"//ADDED
+#include "Good.h"
 #include "Person.h"
 using namespace std;
 
@@ -22,12 +22,12 @@ private:
     int availableGoods = 0;//REMOVE LATER
 
     vector<Person*> peopleList;
-    vector<Good*> goodList; //ADDED
+    vector<Good*> goodList;
 
     int tempAvailWorkers = 0; //REMOVE LATER
     int tempAvailGoods = 0; //REMOVE LATER
 
-    int peopleListCounter = 0; //ADDED for Industrial
+    int peopleListCounter = 0;// to count Industrial and Commercial people used
 
 
     void printMap();
