@@ -38,7 +38,7 @@ float Happiness::RuleCheck(Person* person, vector<vector<int>> pollMap, int poll
     //Check if salary is above limits.
     if (person->getSalary() > upperSalary) {
         //If so, raise happiness.
-        happDiff += ((200 / person->getHappiness()) - 2);
+        happDiff += ((500 / person->getHappiness()) - 5);
     }
         //Check if salary is below limits.
     else if (person->getSalary() < lowerSalary) {
@@ -46,13 +46,13 @@ float Happiness::RuleCheck(Person* person, vector<vector<int>> pollMap, int poll
         happDiff += ((-0.1 * person->getHappiness()) + 0.1);
     }
     //Check if worker has a job.
-    if (person->getEmployed()) {
+    if (!(person->getEmployed())) {
         //If not, decrease happiness.
         happDiff += ((-0.1 * person->getHappiness()) + 0.1 );
     }
     else {
         //If so, increase happiness
-        happDiff += ((200 / person->getHappiness()) - 2);
+        happDiff += ((500 / person->getHappiness()) - 5);
 
         //Check if area has pollution.
         if (PollutionNearby(pollMap, pollutionTolerance, x, y)) {
