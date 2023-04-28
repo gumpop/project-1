@@ -6,11 +6,56 @@
 #include "Residential.h"
 #include "StringSplitter.h"
 #include "CellTypeChars.h"
+#include "GenderType.h"
+#include "ReligionTypes.h"
+#include "RaceType.h"
 
-SimulationLoop::SimulationLoop(string regionFileName, int timeLimit, int refreshRate) {
-    REGION_FILE_NAME = regionFileName;
-    TIME_LIMIT = timeLimit;
-    REFRESH_RATE = refreshRate;
+SimulationLoop::SimulationLoop() {
+    string CONFIG_FILE_NAME;
+    ifstream fin;
+
+    // Obtain config file name from user
+    cout << "Enter configuration file name (ex: \"config1.txt\")" << endl;
+    cin >> CONFIG_FILE_NAME;
+    cout << endl;
+
+    // Opening config file
+    fin.open( CONFIG_FILE_NAME );
+    if ( fin.is_open() == false ) {
+        cout << "Could not open a file named \"" << CONFIG_FILE_NAME << "\"" << endl;
+        exit( 1 );
+    }
+
+    // Getting the region file name from the config
+    string temp;
+    getline( fin, temp );
+    if ( temp.find( ':' ) == string::npos ) {
+        cout << "Invalid config file" << endl;
+        exit( 1 );
+    }
+
+    REGION_FILE_NAME = temp.substr( temp.find( ':' ) + 1, temp.length() );
+    cout << "Region file name is " << REGION_FILE_NAME << endl;
+
+    // Getting the time limit from the config
+    getline( fin, temp );
+    if ( temp.find( ':' ) == string::npos ) {
+        cout << "Invalid config file" << endl;
+        exit( 1 );
+    }
+
+    TIME_LIMIT = stoi( temp.substr( temp.find( ':' ) + 1, temp.length() ) );
+    cout << "Time limit is " << TIME_LIMIT << " timesteps" << endl;
+
+    // Getting the refresh rate
+    getline( fin, temp );
+    if ( temp.find( ':' ) == string::npos ) {
+        cout << "Invalid config file" << endl;
+        exit( 1 );
+    }
+
+    REFRESH_RATE = stoi( temp.substr( temp.find( ':' ) + 1, temp.length() ) );
+    cout << "Refreshes every " << REFRESH_RATE << " timesteps" << endl;
 
     initializeMap();
     printMap();
@@ -52,16 +97,45 @@ void SimulationLoop::end() {
     cout << endl << endl << "Final Region State:" << endl;
     printMap();
 
-    // Getting the total population and regional populations
-    int totalPop = 0, residentialPop = 0, commercialPop = 0, industrialPop = 0;
-    for ( auto rowIter = map.begin(); rowIter < map.end(); rowIter++ ) {
-        vector<Cell*> currentRow = *rowIter;
-        for ( auto colIter = currentRow.begin(); colIter < currentRow.end(); colIter++ ) {
-            Cell *currentCell = *colIter;
-            totalPop += currentCell->getPopulation();
-            if ( currentCell->getType() == RESIDENTIAL ) { residentialPop += currentCell->getPopulation(); }
-            else if ( currentCell->getType() == COMMERCIAL ) { commercialPop += currentCell->getPopulation(); }
-            else if ( currentCell->getType() == INDUSTRIAL ) { industrialPop += currentCell->getPopulation(); }
+    // Getting the census information
+    int maleCount = 0, femaleCount = 0;
+    int whiteCount = 0, blackCount = 0, americanIndianCount = 0, asianCount = 0, pacificIslanderCount = 0, hispanicCount = 0;
+    int protestantCount = 0, catholicCount = 0, mormonCount = 0, orthodoxCount = 0, jewishCount = 0, muslimCount = 0;
+    int buddhistCount = 0, hinduCount = 0, nonReligiousCount = 0;
+    int ageSum = 0;
+    double salarySum = 0;
+    int employedCount = 0;
+    int happinessSum = 0;
+    for ( auto pplIter = peopleList.begin(); pplIter < peopleList.end(); pplIter++ ) {
+        Person *person = *pplIter;
+        ageSum += person->getAge();
+        salarySum += person->getSalary();
+        happinessSum += person->getHappiness();
+
+        if ( person->getEmployed() || person->getEmployedNext() ) { employedCount++; }
+
+        if ( person->getGender() == MALE ) { maleCount++; }
+        else { femaleCount++; }
+
+        switch ( person->getRace() ) {
+            case WHITE: { whiteCount++; break; }
+            case BLACK: { blackCount++; break; }
+            case AMERICAN_INDIAN: { americanIndianCount++; break; }
+            case ASIAN: { asianCount++; break; }
+            case PACIFIC_ISLANDER: { pacificIslanderCount++; break; }
+            case HISPANIC: { hispanicCount++; break; }
+        }
+
+        switch ( person->getReligion() ) {
+            case PROTESTANT: { protestantCount++; break; }
+            case CATHOLIC: { catholicCount++; break; }
+            case MORMON: { mormonCount++; break; }
+            case ORTHODOX: { orthodoxCount++; break; }
+            case JEWISH: { jewishCount++; break; }
+            case MUSLIM: { muslimCount++; break; }
+            case BUDDHIST: { buddhistCount++; break; }
+            case HINDU: { hinduCount++; break; }
+            case NONRELIGIOUS: { nonReligiousCount++; break; }
         }
     }
 
@@ -78,66 +152,62 @@ void SimulationLoop::end() {
     }
     cout << endl;
 
-    // Outputting final region stats
-    cout << "Final Region Stats:" << endl;
-    cout << "Population: " << totalPop << endl;
-    cout << "\tResidential Population: " << residentialPop << endl;
-    cout << "\tCommercial Population: " << commercialPop << endl;
-    cout << "\tIndustrial Population: " << industrialPop << endl;
-    cout << "Total Pollution: " << totalPollution << endl << endl;
+    int totalPop = maleCount + femaleCount;
+    int averageAge = ageSum / totalPop;
+    double averageSalary = salarySum / totalPop;
+    int averageHappiness = happinessSum / totalPop;
 
-    // Outputting final persons
-    for ( auto personIter = peopleList.begin(); personIter < peopleList.end(); personIter++ ) {
-        Person* person = *personIter;
-        person->printPerson();
-        cout << endl;
-    }
+    // Outputting city census information
+    cout << "City Census:" << endl;
+    cout << "Total Population: " << maleCount + femaleCount << endl;
+    cout << maleCount << " males, " << femaleCount << " females" << endl;
+    cout << "Race:" << endl;
+    cout << "\tWhite: " << whiteCount << endl;
+    cout << "\tBlack: " << blackCount << endl;
+    cout << "\tAmerican Indian: " << americanIndianCount << endl;
+    cout << "\tAsian: " << asianCount << endl;
+    cout << "\tPacific Islander: " << pacificIslanderCount << endl;
+    cout << "\tHispanic: " << hispanicCount << endl;
+    cout << "Religion:" << endl;
+    cout << "\tProtestant: " << protestantCount << endl;
+    cout << "\tCatholic: " << catholicCount << endl;
+    cout << "\tMormon: " << mormonCount << endl;
+    cout << "\tOrthodox: " << orthodoxCount << endl;
+    cout << "\tJewish: " << jewishCount << endl;
+    cout << "\tMuslim: " << muslimCount << endl;
+    cout << "\tBuddhist: " << buddhistCount << endl;
+    cout << "\tHindu: " << hinduCount << endl;
+    cout << "\tNon-Religious: " << nonReligiousCount << endl;
+    cout << employedCount << " employed, " << ( totalPop - employedCount )
+            << " unemployed (unemployment rate of " << 100 * ( ( 1.0 * ( totalPop - employedCount ) ) / totalPop ) << "%)" << endl;
+    cout << "Average Age: " << averageAge << endl;
+    cout << "Average Salary: " << averageSalary << endl;
+    cout << "Average Happiness: " << averageHappiness << endl;
+    cout << endl;
 
-    // Prompting for area of closer inspection and outputting stats about that area
-    int xOne = -1, xTwo = -1, yOne = -1, yTwo = -1;
-    while ( xOne == -1 ) {
-        cout << "Where would you like to inspect closer (map starts at 0, 0, input as x1 y1 x2 y2): ";
-        cin >> xOne;
-        cin >> yOne;
-        cin >> xTwo;
-        cin >> yTwo;
+    // Prompting for a cell of closer inspection and outputting the people who live/work in that cell
+    int continueLoop = 1;
+    while ( continueLoop == 1 ) {
+        int x = -1, y = -1;
+        cout << "Which cell would you like to see the people who live/work there? (map starts at 0, 0, input as x1 y1. Input -1 -1 to stop): ";
+        cin >> x;
+        cin >> y;
 
-        if ( yOne < 0 || yOne >= map.size() || yTwo < 0 || yTwo >= map.size() || xOne < 0 || xTwo < 0 ) {
+        if ( x == -1 || y == -1 ) { break; }
+
+        if ( x < 0 || y < 0 || y >= map.size() ) {
             cout << "Invalid coordinates" << endl << endl;
-            xOne = xTwo = yOne = yTwo = -1;
             continue;
         }
 
-        vector<Cell*> rowOne = map.at( yOne );
-        vector<Cell*> rowTwo = map.at( yTwo );
-
-        if ( xOne >= rowOne.size() || xTwo >= rowTwo.size() ) {
+        vector<Cell*> row = map.at( y );
+        if ( x >= row.size() ) {
             cout << "Invalid coordinates" << endl << endl;
-            xOne = xTwo = yOne = yTwo = -1;
             continue;
         }
 
-        int resPop = 0, commPop = 0, indPop = 0;
-        int totalPoll = 0;
-        for ( int i = yOne; i <= yTwo; i++ ) {
-            vector<Cell*> row = map.at( i );
-            for ( int j = xOne; j <= xTwo; j++ ) {
-                Cell* cell = row.at( j );
-                totalPoll += pollution.GetPollMap().at( i ).at( j );
-                if ( cell->getType() == RESIDENTIAL ) { resPop += cell->getPopulation(); }
-                else if ( cell->getType() == COMMERCIAL ) { commPop += cell->getPopulation(); }
-                else if ( cell->getType() == INDUSTRIAL ) { indPop += cell->getPopulation(); }
-            }
-        }
-
-        cout << "Specified Region Stats:" << endl;
-        cout << "Population: " << resPop + commPop + indPop << endl;
-        cout << "\tResidential Population: " << resPop << endl;
-        cout << "\tCommercial Population: " << commPop << endl;
-        cout << "\tIndustrial Population: " << indPop << endl;
-        cout << "Total Pollution: " << totalPoll << endl << endl;
+        row.at( x )->printAllResidents();
     }
-
 }
 
 void SimulationLoop::initializeMap() {

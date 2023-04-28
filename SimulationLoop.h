@@ -36,5 +36,5 @@ private:
     void ageWorkers();
 
 public:
-    SimulationLoop( string regionFileName, int timeLimit, int refreshRate );
+    SimulationLoop();
 };
