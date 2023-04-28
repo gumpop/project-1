@@ -1,5 +1,5 @@
 ##include "Person.h"
-#include "Pollution.h"
+#include "Cell.h"
 #include <iostream>
 #include <string>
 #include <vector>
