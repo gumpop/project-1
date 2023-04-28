@@ -72,12 +72,24 @@ void Cell::setUpdatePollution( bool b ) {
 }
 
 void Cell::setIndustrialWorkerZone(){
-  if(zone != (TECH) && zone != (AGRICULTURAL) && zone != (CONSTRUCTION) && zone != (EDUCATIONAL) && zone != (ENTERTAINMENT)){
-    int zonenum = ((rand() %5) +1);
-    zone = static_cast<IndustrialWorkerZone>(zonenum);
-  }
+    if(zone != (TECH) && zone != (AGRICULTURAL) && zone != (CONSTRUCTION) && zone != (EDUCATIONAL) && zone != (ENTERTAINMENT)){
+        int zonenum = ((rand() %5) +1);
+        zone = static_cast<IndustrialWorkerZone>(zonenum);
+    }
 }
 
 IndustrialWorkerZone Cell::getIndustrialZone() {
     return zone;
 }
+void Cell::printAllResidents(){
+    if(popList.empty()){
+        cout<<"No people work or live in this cell."<<endl;
+        return;
+    }
+    cout<<"People in this cell: "<<endl;
+    for(int x=0; x<popList.size(); x++){
+        popList.at(x)->printPerson();
+        cout<<endl;
+    }
+    cout<<endl;
+} //should use to "Zoom in" on a single cell

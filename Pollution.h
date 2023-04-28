@@ -9,8 +9,8 @@ class Pollution {
     private:
         //Private Variables
         vector<vector<int>> pollMap;    //Stores map of pollution values (integers, 0 to max population).
-        int rows, cols;                 //Stores number of rows (up and down) and columns (left to right).
-
+        int rows, cols, pollutionTolerance;                 //Stores number of rows (up and down) and columns (left to right).
+        bool isInitialized, hasUpdated;
 
     public:
         //Public Methods
@@ -55,4 +55,7 @@ class Pollution {
 
         //Updates the pollution map to correct integers.
         void Update(vector<vector<Cell*>> cellMap);
+
+        //Checks if there is pollution greater than 1 nearby target coordinates.
+        bool PollutionNearby(int x, int y);
 };

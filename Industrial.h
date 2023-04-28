@@ -13,8 +13,8 @@ private:
     int availableWorker = 0;
     int availableWorkerNext = 0;
 public:
-    void IndustrialUpdate(vector<vector<Cell*>> map, vector<Person*> &peopleList, int &peopleListCounter, vector<Good*> &goodList);
-    void IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int availableWorkerNext, vector<Person*> peopleList);
-    void UpdateTimestamp(vector<vector<Cell*>> map, vector<Person*> &peopleList, int &peopleListCounter, int availableWorker, vector<Good*> &goodList);
+    void IndustrialUpdate(vector<vector<Cell*>> map, vector<Person*> &peopleList, int &peopleListCounter, vector<Good*> &goodList);//ADDED
+    void IndustrialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int availableWorkerNext, vector<Person*> peopleList);//ADDED
+    void UpdateTimestamp(vector<vector<Cell*>> map, vector<Person*> &peopleList, int &peopleListCounter, int availableWorker, vector<Good*> &goodList);//ADDED
 };
 #endif //PROJECT_1_INDUSTRIAL_H

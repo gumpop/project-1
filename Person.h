@@ -1,17 +1,12 @@
-//
-// Created by gumpop on 4/20/2023.
-//
-
 #ifndef PROJECT_1_PERSON_H
 #define PROJECT_1_PERSON_H
 
 #include <cstdlib>
 #include <string>
 #include <iostream>
-#include "ReligionTypes.h"
-#include "GenderType.h"
-#include "RaceType.h"
-//#include "Cell.h"
+#include "PersonReligionTypes.h"
+#include "PersonGenderType.h"
+#include "PersonRaceType.h"
 
 using namespace std;
 
@@ -25,8 +20,9 @@ class Person {
         double salary;
         int happiness;
         int age;
-//        Cell* home;
-//        Cell* work;
+        bool isEmployed;
+        bool employedNextTimestep;
+
     public:
     Person();
     //non alterables--do not need setter functions
@@ -42,15 +38,22 @@ class Person {
     void setHappiness( int x) { happiness = x; }
     int getAge() { return age; }
     void setAge( int x) { age = x; }
-//    Cell* getHomeCell() {return home; }
-//    void setHomeCell(Cell* cell) { home = cell; }
-//    Cell* getWorkCell() {return work; }
-//    void setWorkCell(Cell* cell) { work = cell; }
+    bool getEmployed() {return isEmployed;}
+    void setEmployed(bool e) {isEmployed=e;}
+    bool getEmployedNext() {return employedNextTimestep;}
+    void setEmployedNext(bool e) {employedNextTimestep=e;}
+
     //special function for usability
     void incAge() { age=age+5; }
 
     void printPerson();
-
+    //converts types to strings
+    string religionToString();
+    string raceToString();
+    string genderToString();
+    //helper function for constructor
+    void setDemographics();
+    void randNames();
 
 };
 
