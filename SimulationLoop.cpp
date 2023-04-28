@@ -99,7 +99,7 @@ void SimulationLoop::end() {
 
     // Getting the census information
     int maleCount = 0, femaleCount = 0;
-    int whiteCount = 0, blackCount = 0, americanIndianCount = 0, asianCount = 0, pacificIslanderCount = 0, hispanicCount = 0;
+    int whiteCount = 0, blackCount = 0, americanIndianCount = 0, asianCount = 0, pacificIslanderCount = 0, hispanicCount = 0, mixedCount = 0;
     int protestantCount = 0, catholicCount = 0, mormonCount = 0, orthodoxCount = 0, jewishCount = 0, muslimCount = 0;
     int buddhistCount = 0, hinduCount = 0, nonReligiousCount = 0;
     int ageSum = 0;
@@ -124,6 +124,7 @@ void SimulationLoop::end() {
             case ASIAN: { asianCount++; break; }
             case PACIFIC_ISLANDER: { pacificIslanderCount++; break; }
             case HISPANIC: { hispanicCount++; break; }
+            case MIXED: {mixedCount++; break;}
         }
 
         switch ( person->getReligion() ) {
@@ -168,6 +169,7 @@ void SimulationLoop::end() {
     cout << "\tAsian: " << asianCount << endl;
     cout << "\tPacific Islander: " << pacificIslanderCount << endl;
     cout << "\tHispanic: " << hispanicCount << endl;
+    cout << "\tMixed: " << mixedCount << endl;
     cout << "Religion:" << endl;
     cout << "\tProtestant: " << protestantCount << endl;
     cout << "\tCatholic: " << catholicCount << endl;

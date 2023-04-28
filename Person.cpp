@@ -29,7 +29,7 @@ void Person::printPerson() {
     cout<<"Race: "<<raceToString()<<endl;
     cout<<"Gender: "<<genderToString()<<endl;
     cout<<"Salary: $"<<salary<<endl;
-    cout<<"Happiness: "<<happiness<<endl;
+    cout<<"Happiness: "<<happiness<<"%"<<endl;
     cout<<"Age: "<<age<<endl;
 }
 string Person::religionToString(){
