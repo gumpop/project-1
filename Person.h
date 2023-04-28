@@ -1,17 +1,12 @@
-//
-// Created by gumpop on 4/20/2023.
-//
-
 #ifndef PROJECT_1_PERSON_H
 #define PROJECT_1_PERSON_H
 
 #include <cstdlib>
 #include <string>
 #include <iostream>
-#include "ReligionTypes.h"
-#include "GenderType.h"
-#include "RaceType.h"
-//#include "Cell.h"
+#include "PersonReligionTypes.h"
+#include "PersonGenderType.h"
+#include "PersonRaceType.h"
 
 using namespace std;
 

@@ -1,12 +1,37 @@
 #include "Commercial.h"
 
-void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGood,  vector<Person*> &peopleList) {
-
+void Commercial::CommercialUpdate(vector<vector<Cell*>> map, vector<Person*> &peopleList, vector<Good*> &goodList, int &peopleListCounter) {
     //setting bounds
     int boundsi = map.size();
 
+    int temp = 0;
+    int size = peopleList.size();
+    availableWorkerNext = 0;
+    availableWorker = 0;
+    while(size != 0){
+        if(peopleList.at(temp)->getEmployedNext()== true){
+            availableWorkerNext++;
+            availableWorker++;
+        }
+        temp++;
+        size--;
+    }
+
+    temp = 0;
+    size = goodList.size();
+    availableGoodNext = 0;
+    availableGood = 0;
+    while(size != 0){
+        if(goodList.at(temp)->getAvailableNext()== true){
+
+            availableGoodNext++;
+            availableGood++;
+        }
+        temp++;
+        size--;
+    }
     // updating things from previous timestamp
-    //UpdateTimestamp(map, availWorker, availGood); // <-- compiler error here
+    UpdateTimestamp(map, availableWorker, availableGood,  peopleList, peopleListCounter, goodList);
 
     // find commercial cell
     for (int i = 0; i != map.size(); i++){
@@ -16,7 +41,7 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, i
             if (map[i][j]->getType() == COMMERCIAL)
             {
                 // checking for project requirement
-                CommercialCheck(map, i, j, boundsi, boundsj, availWorker, availGood, tempAvailWorker, tempAvailGood);
+                CommercialCheck(map, i, j, boundsi, boundsj, availableWorkerNext, availableGoodNext);
 
 
                 // Check if this commercial cell has been explored before, if not then set it to be a job type.
@@ -30,7 +55,7 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, i
                     map[i][j]->setJobType(random_number);
 
                     // set explored true so job won't be changed again.
-                    // map[i][j]->setCommExplored() == true; // <-- compiler error here
+                    map[i][j]->setCommExplored(true); // <-- compiler error here
                 }
 
             }
@@ -38,7 +63,7 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, int &availWorker, i
     }
 }
 
-void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int &availWorker, int &availGood, int &tempAvailWorker, int &tempAvailGood)
+void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int boundsi, int boundsj, int availableWorkerNext, int availableGoodNext)
 {
 
     int adjPopulationCounter = 0;
@@ -98,11 +123,11 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
                 }
             }
 
-            if(foundPowerline == true && tempAvailWorker >= 1 && tempAvailGood >= 1)
+            if(foundPowerline == true && availableWorkerNext >= 1 && availableGoodNext >= 1)
             {
                 map[i][j]->setUpdate(true);
-                tempAvailWorker--;
-                tempAvailGood--;
+                availableWorkerNext--;
+                availableGoodNext--;
                 break;
             }
 
@@ -154,11 +179,11 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
                 }
             }
 
-            if(adjPopulationCounter >= 1 && tempAvailWorker >= 1 && tempAvailGood >= 1)
+            if(adjPopulationCounter >= 1 && availableWorkerNext >= 1 && availableGoodNext >= 1)
             {
                 map[i][j]->setUpdate(true);
-                tempAvailWorker--;
-                tempAvailGood--;
+                availableWorkerNext--;
+                availableGoodNext--;
                 break;
             }
 
@@ -214,15 +239,13 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
                 }
             }
 
-            if(adjPopulationCounter >= 2 && tempAvailWorker >= 1 && tempAvailGood >= 1)
+            if(adjPopulationCounter >= 2 && availableWorkerNext >= 1 && availableGoodNext >= 1)
             {
                 map[i][j]->setUpdate(true);
-                tempAvailWorker--;
-                tempAvailGood--;
+                availableWorkerNext--;
+                availableGoodNext--;
                 break;
             }
-
-
             break;
 
         default:
@@ -232,28 +255,33 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
 }
 
 
-void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int &availWorker, int &availGood,  vector<Person*> &peopleList)
+void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int availableWorker, int availableGood,  vector<Person*> &peopleList, int &peopleListCounter, vector<Good*> &goodList)
 {
     for(int i = 0; i != map.size(); i++) {
         for(int j = 0; j != map[i].size(); j++) {
+            if(availableWorker >= 1 && availableGood >= 1){
+                if (map[i][j]->isUpdate() && map[i][j]->getType() == COMMERCIAL) {
+                    //increment the population
+                    map[i][j]->incrementPopulation();
 
+                    // Implement the people model
 
-            if (map[i][j]->isUpdate() && map[i][j]->getType() == COMMERCIAL) {
+                    //reduce worker
+                    availableWorker--;
+                    peopleList.at(peopleListCounter)->setEmployedNext(false);
+                    peopleList.at(peopleListCounter)->setEmployed(true);
 
-                //increment the population
-                map[i][j]->incrementPopulation();
+                    //reduce goods
+                    availableGood--;
+                    goodList.at(goodListCounter)->setAvailableNext(false);
+                    goodList.at(goodListCounter)->setAvailable(true);
 
-                // Implement the people model
+                    //set the update to false for the next time-step
+                    map[i][j]->setUpdate(false);
 
-                //reduce worker
-                availWorker--;
-
-                //reduce goods
-                availGood--;
-
-                //set the update to false for the next time-step
-                map[i][j]->setUpdate(false);
-
+                    peopleListCounter++;
+                    goodListCounter++;
+                }
             }
         }
     }

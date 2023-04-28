@@ -310,16 +310,40 @@ void SimulationLoop::doLoop() {
         cloneMap();
 
         // Updating the map through each of the methods
-        residential.ResidentialUpdate( map, availableWorkers, tempAvailWorkers, peopleList );
-        commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList );
-	    industrial.IndustrialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList, peopleListCounter );
+        residential.ResidentialUpdate( map, peopleList );
+        commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList ); //REMOVE  TEMP & AVAILWORKERS LATER
+	    industrial.IndustrialUpdate( map, peopleList, peopleListCounter, goodList);
+
+        // Getting the available workers through the list instead of a global variable
+        int temp = 0;
+        int size = peopleList.size();
+        int availWorkers = 0;
+          while(size != 0){
+            if(peopleList.at(temp)->getEmployedNext()== true){
+              availWorkers++;//Will print below
+            }
+            temp++;
+            size--;
+          }
+      
+        // Getting the available goods through the list instead of a global variable
+        temp = 0;
+        size = goodList.size();
+        int availGoods = 0;
+          while(size != 0){
+            if(goodList.at(temp)->getAvailableNext()== true){
+              availGoods++;//Will print below
+            }
+            temp++;
+            size--;
+          }
 
         ageWorkers();
         // If needing to print map, print it
         if ( timestep % REFRESH_RATE == 0 ) {
             cout << "Timestep: " << timestep << endl;
-            cout << "Available Workers: " << availableWorkers << endl;
-            cout << "Available Goods: " << availableGoods << endl;
+            cout << "Available Workers: " << availWorkers << endl;
+            cout << "Available Goods: " << availGoods << endl;
             printMap();
         }
         // If map after updates is similar to cloned map before updates, exit

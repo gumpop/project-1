@@ -2,6 +2,7 @@
 #include <string>
 #include "Cell.h"
 #include "Pollution.h"
+#include "Good.h"
 #include "Person.h"
 using namespace std;
 
@@ -17,14 +18,16 @@ private:
     vector<vector<Cell>> mapClone;
     Pollution pollution;
     int timestep = 0;
-    int availableWorkers = 0;
+    int availableWorkers = 0;//REMOVE LATER
+    int availableGoods = 0;//REMOVE LATER
+
     vector<Person*> peopleList;
-    int availableGoods = 0;
+    vector<Good*> goodList;
 
-    int tempAvailWorkers = 0;
-    int tempAvailGoods = 0;
+    int tempAvailWorkers = 0; //REMOVE LATER
+    int tempAvailGoods = 0; //REMOVE LATER
 
-    int peopleListCounter = 0; //ADDED for Industrial
+    int peopleListCounter = 0;// to count Industrial and Commercial people used
 
 
     void printMap();
