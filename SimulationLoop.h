@@ -18,14 +18,14 @@ private:
     vector<vector<Cell>> mapClone;
     Pollution pollution;
     int timestep = 0;
-    int availableWorkers = 0;
-    int availableGoods = 0;
+    int availableWorkers = 0;//REMOVE LATER
+    int availableGoods = 0;//REMOVE LATER
 
     vector<Person*> peopleList;
     vector<Good*> goodList; //ADDED
 
-    int tempAvailWorkers = 0;
-    int tempAvailGoods = 0;
+    int tempAvailWorkers = 0; //REMOVE LATER
+    int tempAvailGoods = 0; //REMOVE LATER
 
     int peopleListCounter = 0; //ADDED for Industrial
 

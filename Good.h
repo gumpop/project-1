@@ -2,8 +2,6 @@
 #define PROJECT_1_GOOD_H
 //ADDED
 //Kyndra Nelson - Part of Industrial
-//goods->available() true or false depending on what I put for industrial
-//goods->type() depending on the type of industrial stuff
 #include <iostream>
 #include <vector>
 using namespace std;

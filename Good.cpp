@@ -21,7 +21,7 @@ void Good::setAvailableNext(bool x){
 }
 
 bool Good::getAvailableNext(){
-  return available;
+  return availableNext;
 }
 
 void Good::setType(string x){
