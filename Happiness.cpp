@@ -6,13 +6,13 @@
 Happiness::Happiness() {
     averageHappiness = 0;
     diffAvgHappiness = 0;
-    upperSalary = 2000;
-    lowerSalary = 1000;
+    upperSalary = 75000;
+    lowerSalary = 40000;
 }
 
 //Pass in vector of Worker objects, updates happiness for each worker based on
 //a set of rules defined in RuleCheck() function.
-float Happiness::RuleCheck(Person* person) {
+float Happiness::RuleCheck(Person* person, Pollution &pollution, int x, int y) {
     //Create happiness difference variable
     float happDiff = 0;
     //Check if salary is above limits.
@@ -26,39 +26,46 @@ float Happiness::RuleCheck(Person* person) {
         happDiff += ((-0.1 * person->getHappiness()) + 0.1);
     }
     //Check if worker has a job.
-//    if (person->getWorkCell() == nullptr) { // <-- compiler error here
+    if (person->getEmployed()) {
         //If not, decrease happiness.
-//        happDiff += ((-0.1 * person->getHappiness()) + 0.1 );
-//    }
-//    else {
+        happDiff += ((-0.1 * person->getHappiness()) + 0.1 );
+    }
+    else {
         //If so, increase happiness
-//        happDiff += ((100 / person->getHappiness()) - 1);
-        //Check if job area has pollution.                         //TO BE COMPLETED      
-            //If so, change happiness based on pollution tolerance.
-//    }
-    //Check if residence has pollution.                            //TO BE COMPLETED
-        //If so, change happiness based on pollution tolerance.
+        happDiff += ((100 / person->getHappiness()) - 1);
 
-    return 0; // TEMPORARILY ADDED BY RYAN <3
+        //Check if area has pollution.
+        if (pollution.PollutionNearby(x, y)) {   
+            //If so, change happiness based on pollution tolerance.
+            happDiff += ((-0.1 * person->getHappiness()) + 0.1);
+        }
+    }
+
+    //Returns happiness difference variable.
+    return happDiff;
 }   
 
 //Applies the set of rules for happiness, called by Update() function.
 //Rules include, but are not limited to: Salary amount, adjacency to pollution at redisence or job, has a job.
-void Happiness::Update(vector<Person*> &peopleList) {
+void Happiness::Update(vector<vector<Cell *>> cellMap, vector<Person*> &peopleList, Pollution &pollution) {
     //Create old sum and new sum variable.
     int oldHappySum = 0;
     int newHappySum = 0;
 
-    //Iterate through vector of workers.
-    for (int i = 0; i < peopleList.size(); i++) {
-        //Add old happiness of worker to old sum.
-        oldHappySum += peopleList.at(i)->getHappiness();
-        //Call RuleCheck on current worker and save happiness change value.
-        float happinessDifference = RuleCheck(peopleList.at(i));
-        //Change happiness of worker.
-        peopleList.at(i)->setHappiness((int)happinessDifference + peopleList.at(i)->getHappiness());
-        //Add new happiness of worker to new sum.
-        newHappySum += peopleList.at(i)->getHappiness();
+    for (int x = 0; x < cellMap.size(); x++) {
+        for (int y = 0; y < cellMap.at(x).size(); y++) {
+            //Iterate through vector of workers.
+            for (int i = 0; i < cellMap.at(x).at(y)->getPopList().size(); i++) {
+                //Add old happiness of worker to old sum.
+                oldHappySum += cellMap.at(x).at(y)->getPopList().at(i)->getHappiness();
+                //Call RuleCheck on current worker and save happiness change value.
+                float happinessDifference = RuleCheck(cellMap.at(x).at(y)->getPopList().at(i), pollution, x, y);
+                //Change happiness of worker.
+                cellMap.at(x).at(y)->getPopList().at(i)->setHappiness((int)happinessDifference + cellMap.at(x).at(y)->getPopList().at(i)->getHappiness());
+                //Add new happiness of worker to new sum.
+                newHappySum += cellMap.at(x).at(y)->getPopList().at(i)->getHappiness();
+            }
+        }
     }
     //Finish iteration.
 
