@@ -263,26 +263,28 @@ void Industrial::UpdateTimestamp(vector<vector<Cell*>> map, vector<Person*> &peo
                     //Setting the person's salary based on the zone they are working inside
                     //Salaries are based off of the average for that section
                     //The age resets to 25 if the person dies so assigning everyone a salary if they are 25
-                    if(peopleList.at(peopleListCounter)->getAge() == 25){
-                        if(map[i][j]->getIndustrialZone() == TECH){
-                        peopleList.at(peopleListCounter)->setSalary(102650); 
+                    if(map[i][j]->getIndustrialZone() == TECH){
+                        peopleList.at(peopleListCounter)->setSalary(102650);
+                        peopleList.at(peopleListCounter+1)->setSalary(102650);
                         good->setType("electronic");
-                        }else if(map[i][j]->getIndustrialZone() == AGRICULTURAL){
+                    }else if(map[i][j]->getIndustrialZone() == AGRICULTURAL){
                         peopleList.at(peopleListCounter)->setSalary(92200); //Setting salary
+                        peopleList.at(peopleListCounter+1)->setSalary(92200);
                         good->setType("veggie");
-                        
-                        }else if(map[i][j]->getIndustrialZone() == CONSTRUCTION){
+                    }else if(map[i][j]->getIndustrialZone() == CONSTRUCTION){
                         peopleList.at(peopleListCounter)->setSalary(47000); //Setting salary
+                        peopleList.at(peopleListCounter+1)->setSalary(47000);
                         good->setType("tool");
-                        
-                        }else if(map[i][j]->getIndustrialZone() == EDUCATIONAL){
+
+                    }else if(map[i][j]->getIndustrialZone() == EDUCATIONAL){
                         peopleList.at(peopleListCounter)->setSalary(65000); //Setting salary
+                        peopleList.at(peopleListCounter+1)->setSalary(65000);
                         good->setType("book");
-                        
-                        }else if(map[i][j]->getIndustrialZone() == ENTERTAINMENT){
+
+                    }else if(map[i][j]->getIndustrialZone() == ENTERTAINMENT){
                         peopleList.at(peopleListCounter)->setSalary(80000); //Setting salary
+                        peopleList.at(peopleListCounter+1)->setSalary(80000);
                         good->setType("toy");
-                        }
                     }
                     //Assigning the next worker a salary since Industrial takes 2 salaries
                     if(peopleList.at(peopleListCounter+1)->getAge() == 25){

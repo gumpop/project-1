@@ -1,15 +1,18 @@
 #include "Commercial.h"
 
-void Commercial::CommercialUpdate(vector<vector<Cell*>> map, vector<Person*> &peopleList, vector<Good*> &goodList, int &peopleListCounter) {
-    //setting bounds
+void Commercial::CommercialUpdate(vector<vector<Cell*>> map,
+                                  vector<Person*> &peopleList,
+                                  vector<Good *> &goodList,
+                                  int &peopleListCounter) {
+    // setting bounds
     int boundsi = map.size();
 
     int temp = 0;
     int size = peopleList.size();
     availableWorkerNext = 0;
     availableWorker = 0;
-    while(size != 0){
-        if(peopleList.at(temp)->getEmployedNext()== true){
+    while (size != 0) {
+        if (peopleList.at(temp)->getEmployedNext() == true) {
             availableWorkerNext++;
             availableWorker++;
         }
@@ -21,8 +24,8 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, vector<Person*> &pe
     size = goodList.size();
     availableGoodNext = 0;
     availableGood = 0;
-    while(size != 0){
-        if(goodList.at(temp)->getAvailableNext()== true){
+    while (size != 0) {
+        if (goodList.at(temp)->getAvailableNext() == true) {
 
             availableGoodNext++;
             availableGood++;
@@ -31,33 +34,48 @@ void Commercial::CommercialUpdate(vector<vector<Cell*>> map, vector<Person*> &pe
         size--;
     }
     // updating things from previous timestamp
-    UpdateTimestamp(map, availableWorker, availableGood,  peopleList, peopleListCounter, goodList);
+    UpdateTimestamp(map, availableWorker, availableGood, peopleList,
+                    peopleListCounter, goodList);
 
     // find commercial cell
-    for (int i = 0; i != map.size(); i++){
+    for (int i = 0; i != map.size(); i++) {
         for (int j = 0; j != map[i].size(); j++) {
-            //setting bounds
+            // setting bounds
             int boundsj = map[i].size();
-            if (map[i][j]->getType() == COMMERCIAL)
-            {
+            if (map[i][j]->getType() == COMMERCIAL) {
                 // checking for project requirement
-                CommercialCheck(map, i, j, boundsi, boundsj, availableWorkerNext, availableGoodNext);
-
-
-                // Check if this commercial cell has been explored before, if not then set it to be a job type.
-                if(map[i][j]->getCommExplored() == false)
-                {
+                CommercialCheck(map, i, j, boundsi, boundsj, availableWorkerNext,
+                                availableGoodNext);
+                // NEW CODE
+                // Check if this commercial cell has been explored before, if not then
+                // set it to be a job type.
+                if (map[i][j]->getCommExplored() == false) {
                     // generate random number to set jobs
                     srand(time(NULL));
                     int random_number = rand() % 4 + 1;
 
-                    //set random number as jobType number
+                    // set random number as jobType number
+                    map[i][j]->setJobType(random_number);
+
+                    // set explored true so job won't be changed again.
+                    map[i][j]->setCommExplored(true);
+                }
+
+                // END OF NEW CODE
+
+                // Check if this commercial cell has been explored before, if not then
+                // set it to be a job type.
+                if (map[i][j]->getCommExplored() == false) {
+                    // generate random number to set jobs
+                    srand(time(NULL));
+                    int random_number = rand() % 4 + 1;
+
+                    // set random number as jobType number
                     map[i][j]->setJobType(random_number);
 
                     // set explored true so job won't be changed again.
                     map[i][j]->setCommExplored(true); // <-- compiler error here
                 }
-
             }
         }
     }
@@ -264,23 +282,25 @@ void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int availableWorker, 
                     //increment the population
                     map[i][j]->incrementPopulation();
 
-                    // Implement the people model
+                    // set random number as jobType number
+            //        map[i][j]->setJobType(random_number);
 
-                    //reduce worker
-                    availableWorker--;
-                    peopleList.at(peopleListCounter)->setEmployedNext(false);
-                    peopleList.at(peopleListCounter)->setEmployed(true);
+                    // set explored true so job won't be changed again.
+                    map[i][j]->setCommExplored(true);
+                }
 
-                    //reduce goods
-                    availableGood--;
-                    goodList.at(goodListCounter)->setAvailableNext(false);
-                    goodList.at(goodListCounter)->setAvailable(true);
+                // Check if this commercial cell has been explored before, if not then
+                // set it to be a job type.
+                if (map[i][j]->getCommExplored() == false) {
+                    // generate random number to set jobs
+                    srand(time(NULL));
+                    int random_number = rand() % 4 + 1;
 
-                    //set the update to false for the next time-step
-                    map[i][j]->setUpdate(false);
+                    // set random number as jobType number
+                    map[i][j]->setJobType(random_number);
 
-                    peopleListCounter++;
-                    goodListCounter++;
+                    // set explored true so job won't be changed again.
+                    map[i][j]->setCommExplored(true); // <-- compiler error here
                 }
             }
         }

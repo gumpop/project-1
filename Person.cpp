@@ -17,7 +17,7 @@ Person::Person() {
     lName = names.getLastNames().at(rand()%names.getLastNames().size());
     setDemographics();
     salary = 0;
-    happiness = 60;
+    happiness = 80;
     age = 25;
     isEmployed = false;
     employedNextTimestep = false;

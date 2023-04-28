@@ -4,11 +4,10 @@
 #include "Commercial.h"
 #include "Industrial.h"
 #include "Residential.h"
+#include "Happiness.h"
 #include "StringSplitter.h"
 #include "CellTypeChars.h"
-#include "GenderType.h"
 #include "ReligionTypes.h"
-#include "RaceType.h"
 
 SimulationLoop::SimulationLoop() {
     string CONFIG_FILE_NAME;
@@ -168,7 +167,6 @@ void SimulationLoop::end() {
     cout << "\tAmerican Indian: " << americanIndianCount << endl;
     cout << "\tAsian: " << asianCount << endl;
     cout << "\tPacific Islander: " << pacificIslanderCount << endl;
-    cout << "\tHispanic: " << hispanicCount << endl;
     cout << "\tMixed: " << mixedCount << endl;
     cout << "Religion:" << endl;
     cout << "\tProtestant: " << protestantCount << endl;
@@ -183,8 +181,8 @@ void SimulationLoop::end() {
     cout << employedCount << " employed, " << ( totalPop - employedCount )
             << " unemployed (unemployment rate of " << 100 * ( ( 1.0 * ( totalPop - employedCount ) ) / totalPop ) << "%)" << endl;
     cout << "Average Age: " << averageAge << endl;
-    cout << "Average Salary: " << averageSalary << endl;
-    cout << "Average Happiness: " << averageHappiness << endl;
+    cout << "Average Salary: $" << averageSalary << endl;
+    cout << "Average Happiness: " << averageHappiness << "%" << endl;
     cout << endl;
 
     // Prompting for a cell of closer inspection and outputting the people who live/work in that cell
@@ -303,6 +301,7 @@ void SimulationLoop::doLoop() {
     Residential residential;
     Commercial commercial;
     Industrial industrial;
+    Happiness happiness;
 
     while ( timestep <= TIME_LIMIT ) {
         timestep++;
@@ -311,8 +310,10 @@ void SimulationLoop::doLoop() {
 
         // Updating the map through each of the methods
         residential.ResidentialUpdate( map, peopleList );
-        commercial.CommercialUpdate( map, availableWorkers, availableGoods, tempAvailWorkers, tempAvailGoods, peopleList ); //REMOVE  TEMP & AVAILWORKERS LATER
-	    industrial.IndustrialUpdate( map, peopleList, peopleListCounter, goodList);
+        commercial.CommercialUpdate( map, peopleList, goodList, peopleListCounter );
+	    industrial.IndustrialUpdate( map, peopleList, peopleListCounter, goodList );
+        pollution.Update( map );
+        happiness.Update( map, peopleList, pollution.GetPollMap(), pollution.GetPollutionTolerance() );
 
         // Getting the available workers through the list instead of a global variable
         int temp = 0;
@@ -349,9 +350,6 @@ void SimulationLoop::doLoop() {
         // If map after updates is similar to cloned map before updates, exit
         if ( mapSimilarToClone() && timestep != 1 ) { break; }
     }
-
-    // Updating pollution
-    pollution.Update( map );
 }
 
 void SimulationLoop::ageWorkers() {

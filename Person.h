@@ -4,9 +4,9 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
-#include "PersonReligionTypes.h"
-#include "PersonGenderType.h"
-#include "PersonRaceType.h"
+#include "ReligionTypes.h"
+#include "GenderType.h"
+#include "RaceType.h"
 
 using namespace std;
 

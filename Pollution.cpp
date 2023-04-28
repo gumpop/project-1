@@ -11,7 +11,7 @@ Pollution::Pollution() {
     cols = 0;
     isInitialized = false;
     hasUpdated = false;
-    pollutionTolerance = 1;
+    pollutionTolerance = 2;
 }
 
 //Parameterized Constructor.
@@ -21,12 +21,12 @@ Pollution::Pollution(int numRows, int numCols) {
     cols = numCols;
     isInitialized = false;
     hasUpdated = false;
-    pollutionTolerance = 1;
+    pollutionTolerance = 2;
 }
 
 
 //Prints map of pollution integers (0 to max population).
-void Pollution::PrintPollutionMap() {     
+void Pollution::PrintPollutionMap() {
     //Iterate through pollution map (row).
     for (int i = 0; i < rows; i++) {
         //Iterate through column.
@@ -36,11 +36,11 @@ void Pollution::PrintPollutionMap() {
         }
         cout << endl;
     }
-    
+
 }
 
 //Prints sum of all integer values in popution map ([row1,col1] + [row1,col2] + ... + [lastrow,lastcol]).
-void Pollution::PrintTotalPollution() {    
+void Pollution::PrintTotalPollution() {
     //Create sum variable to store sum.
     int sum = 0;
     //Iterate through pollution map (row).
@@ -59,7 +59,7 @@ void Pollution::PrintTotalPollution() {
 void Pollution::PrintSpecRegion(int startRow, int startCol, int endRow, int endCol) {
     //Check if starting and ending rows/columns are within rows and columns values.
     if (startRow >= 0 && startRow < rows && startCol >= 0 && startCol < cols &&
-    endRow >= startRow && endCol >= startCol && endRow < rows && endCol < cols) {
+        endRow >= startRow && endCol >= startCol && endRow < rows && endCol < cols) {
         //Iterate through pollution map (row), starting at start row, ending at end row.
         int sum = 0;
         for (int i = startRow; i <= endRow; i++) {
@@ -110,7 +110,7 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
             pollMap.push_back(newRow);
         }
     }
-    
+
     //Iterate through passed in map of cells (rows) and reset pollution numbers.
     for (int x = 0; x < cellMap.size(); x++) {
         //Iterate through column of cells.
@@ -126,7 +126,7 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
             }
         }
     }
-    
+
     //Pollution map is now ready to have rules applied to it.
 
     //Check if there has been an update.
@@ -146,24 +146,4 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
             }
         }
     }
-}
-
-//Checks if there is pollution greater than 1 nearby target coordinates.
-bool Pollution::PollutionNearby(int xCoord, int yCoord) {
-    //Iterate around point. First iterates through rows.
-    for (int x = xCoord - 1; x <= xCoord + 1; x++) {
-        //Iterate through columns.
-        for (int y = yCoord - 1; y <= yCoord + 1; y++) {
-            //Check bounds.
-            if (x >= 0 && y >= 0 && x < pollMap.size() && y < pollMap.at(x).size()) {
-                //Check if pollution is greater than pollution tolerance.
-                if (pollMap[x][y] > pollutionTolerance)
-                    //Return that there is pollution abover tolerance in the area.
-                    return true;
-            }
-        }
-    }
-    
-    //Returns false in all other scenarios.
-    return false;
 }
