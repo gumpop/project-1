@@ -72,10 +72,10 @@ void Cell::setUpdatePollution( bool b ) {
 }
 
 void Cell::setIndustrialWorkerZone(){
-  if(zone != (TECH) && zone != (AGRICULTURAL) && zone != (CONSTRUCTION) && zone != (EDUCATIONAL) && zone != (ENTERTAINMENT)){
-    int zonenum = ((rand() %5) +1);
-    zone = static_cast<IndustrialWorkerZone>(zonenum);
-  }
+    if(zone != (TECH) && zone != (AGRICULTURAL) && zone != (CONSTRUCTION) && zone != (EDUCATIONAL) && zone != (ENTERTAINMENT)){
+        int zonenum = ((rand() %5) +1);
+        zone = static_cast<IndustrialWorkerZone>(zonenum);
+    }
 }
 
 IndustrialWorkerZone Cell::getIndustrialZone() {
