@@ -9,6 +9,9 @@ Pollution::Pollution() {
     //Assign default values.
     rows = 0;
     cols = 0;
+    isInitialized = false;
+    hasUpdated = false;
+    pollutionTolerance = 1;
 }
 
 //Parameterized Constructor.
@@ -16,6 +19,9 @@ Pollution::Pollution(int numRows, int numCols) {
     //Assign passed-in values.
     rows = numRows;
     cols = numCols;
+    isInitialized = false;
+    hasUpdated = false;
+    pollutionTolerance = 1;
 }
 
 
@@ -78,37 +84,13 @@ int Pollution::CheckNeighbors(int currPollution, int currRow, int currCol) {
     int maxPollution = currPollution;
 
     //Apply rules.
-    if (currRow + 1 < pollMap.size() && currCol + 1 < pollMap[currRow+1].size()) {
-        if (pollMap[currRow+1][currCol+1] > maxPollution)
-            maxPollution = pollMap[currRow+1][currCol+1];
-    }
-    if (currRow + 1 < pollMap.size() && currCol  < pollMap[currRow+1].size()) {
-        if (pollMap[currRow+1][currCol] > maxPollution)
-            maxPollution = pollMap[currRow+1][currCol];
-    }
-    if (currRow + 1 < pollMap.size() && currCol - 1 >= 0) {
-        if (pollMap[currRow+1][currCol-1] > maxPollution) 
-            maxPollution = pollMap[currRow+1][currCol-1];
-    }
-    if (currRow < pollMap.size() && currCol - 1 >= 0) {
-        if (pollMap[currRow][currCol-1] > maxPollution)
-            maxPollution = pollMap[currRow][currCol-1];
-    }
-    if (currRow - 1 >= 0 && currCol - 1 >= 0) {
-        if (pollMap[currRow-1][currCol-1] > maxPollution)
-            maxPollution = pollMap[currRow-1][currCol-1];
-    }
-    if (currRow - 1 >= 0 && currCol >= 0) {
-        if (pollMap[currRow-1][currCol] > maxPollution)
-            maxPollution = pollMap[currRow-1][currCol];
-    }
-    if (currRow - 1 >= 0 && currCol + 1 < pollMap[currRow-1].size()) {
-        if (pollMap[currRow-1][currCol+1] > maxPollution)
-            maxPollution = pollMap[currRow-1][currCol+1];
-    }
-    if (currRow >= 0 && currCol + 1 < pollMap[currRow].size()) {
-        if (pollMap[currRow][currCol+1] > maxPollution)
-            maxPollution = pollMap[currRow][currCol+1];
+    for (int x = currRow - 1; x <= currRow + 1; x++) {
+        for (int y = currCol - 1; y <= currCol + 1; y++) {
+            if (x != currRow && y != currCol && x >= 0 && y >= 0 && x < pollMap.size() && y < pollMap.at(x).size()) {
+                if (pollMap[x][y] > maxPollution)
+                    maxPollution = pollMap[x][y];
+            }
+        }
     }
 
     //Return new pollution value.
@@ -118,26 +100,29 @@ int Pollution::CheckNeighbors(int currPollution, int currRow, int currCol) {
 //Updates the pollution map to correct integers.
 void Pollution::Update(vector<vector<Cell *>> cellMap) {
     //Create boolean for if the map has updated.
-    bool hasUpdated = true;
+    hasUpdated = true;
 
-    //Initializing pollution map
-    for (int i = 0; i < cellMap.size()-1; i++) {
-        vector<int> newRow(cellMap.at(i).size());
-        pollMap.push_back(newRow);
+    if (!isInitialized) {
+        isInitialized = true;
+        //Initializing pollution map
+        for (int i = 0; i < cellMap.size()-1; i++) {
+            vector<int> newRow(cellMap.at(i).size());
+            pollMap.push_back(newRow);
+        }
     }
     
-    //Iterate through passed in map of cells (rows).
-    for (int i = 0; i < cellMap.size(); i++) {
+    //Iterate through passed in map of cells (rows) and reset pollution numbers.
+    for (int x = 0; x < cellMap.size(); x++) {
         //Iterate through column of cells.
-        for (int j = 0; j < cellMap.at(i).size(); j++) {
+        for (int y = 0; y < cellMap.at(x).size(); y++) {
             //Check if cell is of industrial type.
-            if (cellMap[i][j]->getType() == INDUSTRIAL) {
+            if (cellMap[x][y]->getType() == INDUSTRIAL) {
                 //If it is an industrial cell, set corresponding coordinates in the pollution map equal
                 //to the population of that industrial cell.
-                pollMap[i][j] = cellMap[i][j]->getPopulation();
+                pollMap[x][y] = cellMap[x][y]->getPopulation();
             }
             else {
-                pollMap[i][j] = 0;
+                pollMap[x][y] = 0;
             }
         }
     }
@@ -161,4 +146,24 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
             }
         }
     }
+}
+
+//Checks if there is pollution greater than 1 nearby target coordinates.
+bool Pollution::PollutionNearby(int xCoord, int yCoord) {
+    //Iterate around point. First iterates through rows.
+    for (int x = xCoord - 1; x <= xCoord + 1; x++) {
+        //Iterate through columns.
+        for (int y = yCoord - 1; y <= yCoord + 1; y++) {
+            //Check bounds.
+            if (x >= 0 && y >= 0 && x < pollMap.size() && y < pollMap.at(x).size()) {
+                //Check if pollution is greater than pollution tolerance.
+                if (pollMap[x][y] > pollutionTolerance)
+                    //Return that there is pollution abover tolerance in the area.
+                    return true;
+            }
+        }
+    }
+    
+    //Returns false in all other scenarios.
+    return false;
 }

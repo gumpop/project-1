@@ -7,7 +7,9 @@ enum RaceType {
     AMERICAN_INDIAN,
     ASIAN,
     PACIFIC_ISLANDER,
-    HISPANIC
+    HISPANIC,
+    MIXED
+
 };
 
 #endif //GROUP_PROJECT_1___SIM_CITY_RACETYPE_H

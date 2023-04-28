@@ -11,19 +11,19 @@
 using namespace std;
 
 class Person {
-private:
-    string fName;
-    string lName;
-    ReligionType religion;
-    RaceType race;
-    GenderType gender;
-    double salary;
-    int happiness;
-    int age;
-    bool isEmployed;
-    bool employedNextTimestep;
+    private:
+        string fName;
+        string lName;
+        ReligionType religion;
+        RaceType race;
+        GenderType gender;
+        double salary;
+        int happiness;
+        int age;
+        bool isEmployed;
+        bool employedNextTimestep;
 
-public:
+    public:
     Person();
     //non alterables--do not need setter functions
     string getFirst() { return fName;}
