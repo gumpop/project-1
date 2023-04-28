@@ -147,23 +147,3 @@ void Pollution::Update(vector<vector<Cell *>> cellMap) {
         }
     }
 }
-
-//Checks if there is pollution greater than 1 nearby target coordinates.
-bool Pollution::PollutionNearby(int xCoord, int yCoord) {
-    //Iterate around point. First iterates through rows.
-    for (int x = xCoord - 1; x <= xCoord + 1; x++) {
-        //Iterate through columns.
-        for (int y = yCoord - 1; y <= yCoord + 1; y++) {
-            //Check bounds.
-            if (x >= 0 && y >= 0 && x < pollMap.size() && y < pollMap.at(x).size()) {
-                //Check if pollution is greater than pollution tolerance.
-                if (pollMap[x][y] > pollutionTolerance)
-                    //Return that there is pollution abover tolerance in the area.
-                    return true;
-            }
-        }
-    }
-    
-    //Returns false in all other scenarios.
-    return false;
-}
