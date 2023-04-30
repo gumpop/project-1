@@ -273,36 +273,91 @@ void Commercial::CommercialCheck(vector<vector<Cell*>> map, int i, int j, int bo
 }
 
 
-void Commercial::UpdateTimestamp(vector<vector<Cell*>> map,int availableWorker, int availableGood,  vector<Person*> &peopleList, int &peopleListCounter, vector<Good*> &goodList)
-{
-    for(int i = 0; i != map.size(); i++) {
-        for(int j = 0; j != map[i].size(); j++) {
-            if(availableWorker >= 1 && availableGood >= 1){
-                if (map[i][j]->isUpdate() && map[i][j]->getType() == COMMERCIAL) {
-                    //increment the population
-                    map[i][j]->incrementPopulation();
+void Commercial::UpdateTimestamp(vector<vector<Cell *>> map,
+                                 int availableWorker, int availableGood,
+                                 vector<Person *> &peopleList,
+                                 int &peopleListCounter,
+                                 vector<Good *> &goodList) {
+  int curGood;
+  int curPerson;
+  int tempSalary;
+  int i2;
 
-                    // set random number as jobType number
-            //        map[i][j]->setJobType(random_number);
+  for (int i = 0; i != map.size(); i++) {
+    for (int j = 0; j != map[i].size(); j++) {
+      if (availableWorker >= 1 && availableGood >= 1) {
+        if (map[i][j]->isUpdate() && map[i][j]->getType() == COMMERCIAL) {
 
-                    // set explored true so job won't be changed again.
-                    map[i][j]->setCommExplored(true);
-                }
-
-                // Check if this commercial cell has been explored before, if not then
-                // set it to be a job type.
-                if (map[i][j]->getCommExplored() == false) {
-                    // generate random number to set jobs
-                    srand(time(NULL));
-                    int random_number = rand() % 4 + 1;
-
-                    // set random number as jobType number
-                    map[i][j]->setJobType(random_number);
-
-                    // set explored true so job won't be changed again.
-                    map[i][j]->setCommExplored(true); // <-- compiler error here
-                }
+          // NEW CODE ADDED (COMMERCIAL IMPLEMENTATOIN)
+/*
+          for (int i = 0; i < peopleList.size(); i++) {
+            if (peopleList[i]->getEmployed() == false) {
+              curPerson = i;
             }
+          }
+*/
+          for (int i = 0; i < goodList.size(); i++) {
+            if (goodList[i]->getAvailableNext() == false) {
+              curGood = i;
+            }
+          }
+
+          // INDEX FOR JOB -- used www.findlaw.com and the laws on what
+          // commercial zoning requires to set salary 1 = Grocery store 2 =
+          // Night club 3 = Hotel 4 = Luxury Shopping Center
+
+          // setting salary for people
+
+          if (map[i][j]->getJobType() == 1) {
+            peopleList.at(peopleListCounter)->setSalary(35000);
+          } else if (map[i][j]->getJobType() == 2) {
+            peopleList.at(peopleListCounter)->setSalary(47000);
+          } else if (map[i][j]->getJobType() == 3) {
+            peopleList.at(peopleListCounter)->setSalary(40000);
+          } else if (map[i][j]->getJobType() == 4) {
+            peopleList.at(peopleListCounter)->setSalary(55000);
+          }
+
+          // updating salary based on age
+          double ageMultiplier = 1;
+          if (peopleList.at(peopleListCounter)->getAge() >= 25) {
+            ageMultiplier = 1.1;
+          } else if (peopleList.at(peopleListCounter)->getAge() >= 35) {
+            ageMultiplier = 1.2;
+          } else if (peopleList.at(peopleListCounter)->getAge() >= 45) {
+            ageMultiplier = 1.25;
+          } else if (peopleList.at(peopleListCounter)->getAge() >= 55) {
+            ageMultiplier = 1.42;
+          }
+
+          tempSalary = peopleList.at(peopleListCounter)->getSalary() * ageMultiplier;
+          peopleList.at(peopleListCounter)->setSalary(tempSalary);
+
+          // END OF NEW CODE
+
+          // increment the population
+          map[i][j]->incrementPopulation();
+
+          // reduce worker
+          availableWorker--;
+          peopleList.at(peopleListCounter)->setEmployedNext(false);
+          peopleList.at(peopleListCounter)->setEmployed(true);
+
+          // reduce goods
+          availableGood--;
+          goodList.at(goodListCounter)->setAvailableNext(false);
+          goodList.at(goodListCounter)->setAvailable(true);
+
+          // set the update to false for the next time-step
+          map[i][j]->setUpdate(false);
+
+          //Adding the workers to the population list for that cell
+          map[i][j]->addToPopList(peopleList.at(peopleListCounter));
+
+          peopleListCounter++;
+          goodListCounter++;
         }
+      }
     }
+  }
 }
