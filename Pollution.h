@@ -28,6 +28,7 @@ class Pollution {
         int GetCols() {
             return cols;
         }
+        int GetPollutionTolerance() { return pollutionTolerance; }
         vector<vector<int>> GetPollMap() {
             return pollMap;
         }
